@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE builder SYSTEM "builder.dtd">
+<builder>
+	<configuration-class type="com.oneliang.tools.builder.base.Configuration"/>
+
+	<handler name="clean" type="com.oneliang.tools.builder.base.BaseHandler">
+		<command value="javac -help"/>
+	</handler>
+
+	<task-node-insert name="clean">
+		<handler-name value="clean"/>
+	</task-node-insert>
+
+</builder>
