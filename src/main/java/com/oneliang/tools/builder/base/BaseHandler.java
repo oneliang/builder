@@ -5,11 +5,12 @@ import java.util.List;
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.base.BuilderConfiguration.HandlerBean;
 import com.oneliang.util.common.StringUtil;
-import com.oneliang.util.log.Logger;
+import com.oneliang.util.logging.Logger;
+import com.oneliang.util.logging.LoggerManager;
 
 public class BaseHandler extends AbstractHandler {
 
-	private static final Logger logger=Logger.getLogger(BaseHandler.class);
+	private static final Logger logger=LoggerManager.getLogger(BaseHandler.class);
 
 	public boolean handle() {
 		if(this.executorList!=null){
@@ -32,17 +33,17 @@ public class BaseHandler extends AbstractHandler {
 									this.beforeInnerHandlerHandle(handler);
 									boolean result=handler.handle();
 									if(!result){
-										logger.log("Handler handle failure:"+handler);
+										logger.error("Handler handle failure:"+handler, null);
 										return false;
 									}
 								}catch (Exception e) {
 									logger.error(Constant.Base.EXCEPTION, e);
-									logger.log("Handler handle failure:"+handler);
+									logger.error("Handler handle failure:"+handler, null);
 									return false;
 								}
 							}
 						}else{
-							logger.error("Handler["+handlerName+"] is not exist.");
+							logger.error("Handler["+handlerName+"] is not exist.", null);
 							return false;
 						}
 						break;

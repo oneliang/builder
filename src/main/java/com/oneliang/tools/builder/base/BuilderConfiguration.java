@@ -20,14 +20,15 @@ import com.oneliang.util.common.ClassUtil;
 import com.oneliang.util.common.JavaXmlUtil;
 import com.oneliang.util.common.ObjectUtil;
 import com.oneliang.util.common.StringUtil;
-import com.oneliang.util.log.Logger;
+import com.oneliang.util.logging.Logger;
+import com.oneliang.util.logging.LoggerManager;
 
 /**
  * only builder configuration
  */
 public class BuilderConfiguration {
 
-	private static final Logger logger=Logger.getLogger(BuilderConfiguration.class);
+	private static final Logger logger=LoggerManager.getLogger(BuilderConfiguration.class);
 
 	public static final String MAP_KEY_CONCURRENT_MAX_THREADS="concurrent.max.threads";
 	public static final String MAP_KEY_TASK_NODE_TIME_FILE="task.node.time.file";
@@ -69,9 +70,9 @@ public class BuilderConfiguration {
 		}
 		this.taskNodeTimeFile=this.configurationMap.get(MAP_KEY_TASK_NODE_TIME_FILE);
 
-		logger.log("Version:"+Version.MAJOR+Constant.Symbol.DOT+Version.MINOR+Constant.Symbol.DOT+Version.PATCH+"\tbuildDate:"+Version.BUILD_DATE);
-		logger.log("Default("+MAP_KEY_CONCURRENT_MAX_THREADS+Constant.Symbol.COLON+this.maxThreads+")");
-		logger.log("Default("+MAP_KEY_TASK_NODE_TIME_FILE+Constant.Symbol.COLON+this.taskNodeTimeFile+")");
+		logger.info("Version:"+Version.MAJOR+Constant.Symbol.DOT+Version.MINOR+Constant.Symbol.DOT+Version.PATCH+"\tbuildDate:"+Version.BUILD_DATE);
+		logger.info("Default("+MAP_KEY_CONCURRENT_MAX_THREADS+Constant.Symbol.COLON+this.maxThreads+")");
+		logger.info("Default("+MAP_KEY_TASK_NODE_TIME_FILE+Constant.Symbol.COLON+this.taskNodeTimeFile+")");
 		Iterator<Entry<String,String>> iterator=this.configurationMap.entrySet().iterator();
 		while(iterator.hasNext()){
 			Entry<String,String> entry=iterator.next();
@@ -85,7 +86,7 @@ public class BuilderConfiguration {
 				}
 			}
 			if(needToLog){
-				logger.log("Configuration("+key+Constant.Symbol.COLON+value+")");
+				logger.info("Configuration("+key+Constant.Symbol.COLON+value+")");
 			}
 		}
 		this.configuration.initialize();

@@ -17,20 +17,21 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import proguard.ProGuard;
-
 import com.android.dx.merge.DexMerger;
 import com.oneliang.Constant;
 import com.oneliang.util.common.JavaXmlUtil;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
 import com.oneliang.util.file.FileUtil.ZipEntryPath;
-import com.oneliang.util.log.Logger;
+import com.oneliang.util.logging.Logger;
+import com.oneliang.util.logging.LoggerManager;
 import com.sun.tools.javac.Main;
+
+import proguard.ProGuard;
 
 public final class BuilderUtil {
 
-	private static final Logger logger=Logger.getLogger(BuilderUtil.class);
+	private static final Logger logger=LoggerManager.getLogger(BuilderUtil.class);
 
 	private static boolean isWindowsOS=false;
 	static{
@@ -660,7 +661,7 @@ public final class BuilderUtil {
 				if (commandArray.length == 1) {
 					String command = commandArray[0];
 					if(needToLogCommand){
-						logger.log(command);
+						logger.info(command);
 					}
 					process = Runtime.getRuntime().exec(command,environmentParameter);
 				} else {
@@ -669,7 +670,7 @@ public final class BuilderUtil {
 						commandStringBuilder.append(command.trim()+StringUtil.SPACE);
 					}
 					if(needToLogCommand){
-						logger.log(commandStringBuilder);
+						logger.info(commandStringBuilder);
 					}
 					process = Runtime.getRuntime().exec(commandArray,environmentParameter);
 				}
@@ -861,7 +862,7 @@ public final class BuilderUtil {
 				String string=null;
 				while((string=bufferedReader.readLine())!=null){
 					if(this.needToLog){
-						logger.log("["+this.tag+"]"+string);
+						logger.info("["+this.tag+"]"+string);
 					}
 				}
 			}catch(Exception e) {
