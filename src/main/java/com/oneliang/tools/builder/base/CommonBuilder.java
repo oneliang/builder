@@ -8,14 +8,15 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.oneliang.Constant;
-import com.oneliang.frame.task.TaskEngine;
-import com.oneliang.frame.task.TaskNode;
 import com.oneliang.tools.builder.base.BuilderConfiguration.TaskNodeInsertBean;
-import com.oneliang.util.log.Logger;
+import com.oneliang.util.logging.Logger;
+import com.oneliang.util.logging.LoggerManager;
+import com.oneliang.util.task.TaskEngine;
+import com.oneliang.util.task.TaskNode;
 
 public class CommonBuilder implements Builder {
 
-	protected static final Logger logger=Logger.getLogger(CommonBuilder.class);
+	protected static final Logger logger=LoggerManager.getLogger(CommonBuilder.class);
 
 	protected final List<TaskNode> rootTaskNodeList=new CopyOnWriteArrayList<TaskNode>();
 	protected final Map<String,TaskNode> taskNodeMap=new ConcurrentHashMap<String,TaskNode>();
@@ -53,9 +54,9 @@ public class CommonBuilder implements Builder {
 		int second=costCalendar.get(Calendar.SECOND);
 		int millisecond=costCalendar.get(Calendar.MILLISECOND);
 		if(this.taskEngine.isSuccessful()){
-			logger.log("BUILD SUCCESSFUL,cost:"+minute+"m\t"+second+"s\t"+millisecond+"ms");
+			logger.info("BUILD SUCCESSFUL,cost:"+minute+"m\t"+second+"s\t"+millisecond+"ms");
 		}else{
-			logger.log("BUILD FAILURE,cost:"+minute+"m\t"+second+"s\t"+millisecond+"ms");
+			logger.info("BUILD FAILURE,cost:"+minute+"m\t"+second+"s\t"+millisecond+"ms");
 		}
 	}
 
@@ -96,7 +97,7 @@ public class CommonBuilder implements Builder {
 							TaskNode parentTaskNode=this.taskNodeMap.get(parentName);
 							parentTaskNode.addChildTaskNode(taskNode);
 						}else{
-							logger.log("[WARNING]Insert node("+taskNodeInsertBean.getName()+") set parent task node name("+parentName+") is not exist");
+							logger.warning("[WARNING]Insert node("+taskNodeInsertBean.getName()+") set parent task node name("+parentName+") is not exist");
 						}
 					}
 				}
@@ -106,7 +107,7 @@ public class CommonBuilder implements Builder {
 							TaskNode childTaskNode=this.taskNodeMap.get(childName);
 							taskNode.addChildTaskNode(childTaskNode);
 						}else{
-							logger.log("[WARNING]Insert node("+taskNodeInsertBean.getName()+") set child task node name("+childName+") is not exist");
+							logger.warning("[WARNING]Insert node("+taskNodeInsertBean.getName()+") set child task node name("+childName+") is not exist");
 						}
 					}
 				}
@@ -124,7 +125,7 @@ public class CommonBuilder implements Builder {
 	 * exit
 	 */
 	protected final void exit(String message){
-		logger.log("----------COMPILE FAILURE----------:"+message);
+		logger.error("----------COMPILE FAILURE----------:"+message, null);
 		System.exit(1);
 	}
 }

@@ -2,7 +2,7 @@ package com.oneliang.tools.builder.base;
 
 import java.util.Map;
 
-import com.oneliang.frame.task.TaskNode;
+import com.oneliang.util.task.TaskNode;
 
 public abstract interface Builder {
 

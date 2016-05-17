@@ -2,12 +2,13 @@ package com.oneliang.tools.builder.base;
 
 import java.io.File;
 
-import com.oneliang.frame.task.TaskEngine;
-import com.oneliang.util.log.Logger;
+import com.oneliang.util.logging.Logger;
+import com.oneliang.util.logging.LoggerManager;
+import com.oneliang.util.task.TaskEngine;
 
 public final class CommandLine {
 
-	private static final Logger logger=Logger.getLogger(CommandLine.class);
+	private static final Logger logger=LoggerManager.getLogger(CommandLine.class);
 
 	/**
 	 * initialize builder
@@ -25,7 +26,7 @@ public final class CommandLine {
 			overrideArgs=new String[args.length-overrideArgsIndex];
 			System.arraycopy(args, overrideArgsIndex, overrideArgs, 0, overrideArgs.length);
 		}
-		logger.log("Read builder configuration:"+builderConfigFullFilename);
+		logger.info("Read builder configuration:"+builderConfigFullFilename);
 		Builder builder=null;
 		if(builderConfiguration==null){
 			builderConfiguration=new BuilderConfiguration(builderConfigFullFilename, overrideArgs);
