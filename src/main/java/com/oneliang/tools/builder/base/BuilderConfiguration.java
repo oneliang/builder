@@ -32,9 +32,11 @@ public class BuilderConfiguration {
 
 	public static final String MAP_KEY_CONCURRENT_MAX_THREADS="concurrent.max.threads";
 	public static final String MAP_KEY_TASK_NODE_TIME_FILE="task.node.time.file";
+	public static final String MAP_KEY_TARGET_TASK="target.task";
 	
 	private int maxThreads=Runtime.getRuntime().availableProcessors();
 	private String taskNodeTimeFile=null;
+	private String targetTask=null;
 	private Configuration configuration=null;
 	private ConfigurationClassBean configurationClassBean=new ConfigurationClassBean();
 	private List<TaskNodeInsertBean> taskNodeInsertBeanList=new ArrayList<TaskNodeInsertBean>();
@@ -63,13 +65,13 @@ public class BuilderConfiguration {
 	protected void initialize(){
 		this.parseFromXml(this.configurationFullFilename, this.overrideArgs);
 		this.parseOverrideCommand(this.overrideArgs);
-		this.resetNewConfiguration();
+		this.autoSetNewConfiguration();
 		String mapKeyConcurrentMaxThreads=this.configurationMap.get(MAP_KEY_CONCURRENT_MAX_THREADS);
 		if(!StringUtil.isBlank(mapKeyConcurrentMaxThreads)){
 			this.maxThreads=Integer.parseInt(String.valueOf(this.maxThreads).trim());
 		}
 		this.taskNodeTimeFile=this.configurationMap.get(MAP_KEY_TASK_NODE_TIME_FILE);
-
+		this.targetTask=this.configurationMap.get(MAP_KEY_TARGET_TASK);
 		logger.info("Version:"+Version.MAJOR+Constant.Symbol.DOT+Version.MINOR+Constant.Symbol.DOT+Version.PATCH+"\tbuildDate:"+Version.BUILD_DATE);
 		logger.info("Default("+MAP_KEY_CONCURRENT_MAX_THREADS+Constant.Symbol.COLON+this.maxThreads+")");
 		logger.info("Default("+MAP_KEY_TASK_NODE_TIME_FILE+Constant.Symbol.COLON+this.taskNodeTimeFile+")");
@@ -105,6 +107,10 @@ public class BuilderConfiguration {
 			}
 		}
 		this.initializeTaskNodeInsertBean();
+	}
+
+	public String getTargetTask() {
+		return targetTask;
 	}
 
 	/**
@@ -189,7 +195,6 @@ public class BuilderConfiguration {
 				JavaXmlUtil.initializeFromAttributeMap(taskNodeInsertBean, taskNodeInsertNamedNodeMap);
 				NodeList taskNodeInsertNodeChildNodeList=taskNodeInsertNode.getChildNodes();
 				List<String> parentNameList=new ArrayList<String>();
-				List<String> childNameList=new ArrayList<String>();
 				for(int j=0;j<taskNodeInsertNodeChildNodeList.getLength();j++){
 					Node childNode=taskNodeInsertNodeChildNodeList.item(j);
 					if (childNode.getNodeType() != Node.ELEMENT_NODE) {
@@ -201,8 +206,6 @@ public class BuilderConfiguration {
 						String value=childNodeNamedNodeMap.getNamedItem(TaskNodeInsertBean.XML_ATTRIBUTE_TASK_NODE_INSERT_CHILD_NODE_VALUE).getNodeValue();
 						if(nodeName.equals(TaskNodeInsertBean.XML_TAG_TASK_NODE_INSERT_PARENT_NAME)){
 							parentNameList.add(value);
-						}else if(nodeName.equals(TaskNodeInsertBean.XML_TAG_TASK_NODE_INSERT_CHILD_NAME)){
-							childNameList.add(value);
 						}else if(nodeName.equals(TaskNodeInsertBean.XML_TAG_TASK_NODE_INSERT_HANDLER_NAME)){
 							taskNodeInsertBean.setHandlerName(value);
 						}
@@ -210,9 +213,6 @@ public class BuilderConfiguration {
 				}
 				if(!parentNameList.isEmpty()){
 					taskNodeInsertBean.setParentNames(parentNameList.toArray(new String[]{}));
-				}
-				if(!childNameList.isEmpty()){
-					taskNodeInsertBean.setChildNames(childNameList.toArray(new String[]{}));
 				}
 				this.addTaskNodeInsertBean(taskNodeInsertBean);
 			}
@@ -237,9 +237,9 @@ public class BuilderConfiguration {
 	}
 
 	/**
-	 * reset new configuration
+	 * auto set new configuration
 	 */
-	private void resetNewConfiguration(){
+	private void autoSetNewConfiguration(){
 		Method[] methods=this.configuration.getClass().getMethods();
 		for(Method method:methods){
             String methodName=method.getName();
@@ -574,12 +574,10 @@ public class BuilderConfiguration {
 	public static final class TaskNodeInsertBean{
 		public static final String XML_TAG_TASK_NODE_INSERT="task-node-insert";
 		public static final String XML_TAG_TASK_NODE_INSERT_PARENT_NAME="parent-name";
-		public static final String XML_TAG_TASK_NODE_INSERT_CHILD_NAME="child-name";
 		public static final String XML_TAG_TASK_NODE_INSERT_HANDLER_NAME="handler-name";
 		public static final String XML_ATTRIBUTE_TASK_NODE_INSERT_CHILD_NODE_VALUE="value";
 		private String name=null;
 		private String[] parentNames=null;
-		private String[] childNames=null;
 		private String handlerName=null;
 		private boolean skip=false;
 		private Handler handlerInstance=null;
@@ -606,18 +604,6 @@ public class BuilderConfiguration {
 		 */
 		public void setParentNames(String[] parentNames) {
 			this.parentNames = parentNames;
-		}
-		/**
-		 * @return the childNames
-		 */
-		public String[] getChildNames() {
-			return childNames;
-		}
-		/**
-		 * @param childNames the childNames to set
-		 */
-		public void setChildNames(String[] childNames) {
-			this.childNames = childNames;
 		}
 		/**
 		 * @return the handlerName

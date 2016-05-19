@@ -19,17 +19,17 @@ public final class CommandLine {
 	 * @throws Exception
 	 */
 	public static Builder initializeBuilder(String[] args,BuilderConfiguration builderConfiguration, TaskEngine taskEngine) throws Exception{
-		String builderConfigFullFilename=new File(args[0]).getAbsolutePath();
+		String builderConfigurationFullFilename=new File(args[0]).getAbsolutePath();
 		final int overrideArgsIndex=1;
 		String[] overrideArgs=null;
 		if(args.length>overrideArgsIndex){
 			overrideArgs=new String[args.length-overrideArgsIndex];
 			System.arraycopy(args, overrideArgsIndex, overrideArgs, 0, overrideArgs.length);
 		}
-		logger.info("Read builder configuration:"+builderConfigFullFilename);
+		logger.info("Read builder configuration:"+builderConfigurationFullFilename);
 		Builder builder=null;
 		if(builderConfiguration==null){
-			builderConfiguration=new BuilderConfiguration(builderConfigFullFilename, overrideArgs);
+			builderConfiguration=new BuilderConfiguration(builderConfigurationFullFilename, overrideArgs);
 		}
 		builderConfiguration.initialize();
 		if(taskEngine==null){

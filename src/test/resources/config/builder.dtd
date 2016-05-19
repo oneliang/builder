@@ -16,12 +16,10 @@
 <!ATTLIST reference-handler-name value CDATA #REQUIRED>
 <!ELEMENT command EMPTY>
 <!ATTLIST command value CDATA #REQUIRED>
-<!ELEMENT task-node-insert (parent-name*,child-name*,handler-name)>
+<!ELEMENT task-node-insert (parent-name*,handler-name)>
 <!ATTLIST task-node-insert name CDATA #REQUIRED>
 <!ATTLIST task-node-insert skip (false|true) #IMPLIED>
 <!ELEMENT parent-name EMPTY>
-<!ELEMENT child-name EMPTY>
 <!ELEMENT handler-name EMPTY>
 <!ATTLIST parent-name value CDATA #REQUIRED>
-<!ATTLIST child-name value CDATA #REQUIRED>
 <!ATTLIST handler-name value CDATA #REQUIRED>

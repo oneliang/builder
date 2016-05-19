@@ -20,7 +20,7 @@ public class Main {
 		List<AbstractLogger> loggerList=new ArrayList<AbstractLogger>();
 		loggerList.add(new BaseLogger(Logger.Level.VERBOSE));
 		loggerList.add(new FileLogger(Logger.Level.VERBOSE,new File(projectRealPath+"/log/default.log")));
-		Logger logger=new ComplexLogger(Logger.Level.VERBOSE, loggerList);
+		Logger logger=new ComplexLogger(Logger.Level.INFO, loggerList);
 		LoggerManager.registerLogger("*", logger);
 	}
 	

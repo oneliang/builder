@@ -2,13 +2,19 @@ package com.oneliang.tools.builder.base;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.oneliang.Constant;
 import com.oneliang.tools.builder.base.BuilderConfiguration.TaskNodeInsertBean;
+import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.logging.Logger;
 import com.oneliang.util.logging.LoggerManager;
 import com.oneliang.util.task.TaskEngine;
@@ -37,7 +43,7 @@ public class CommonBuilder implements Builder {
 	}
 
 	public Map<String, TaskNode> prepare() {
-		this.insertTaskNode(this.builderConfiguration.getTaskNodeInsertBeanList());
+		this.insertTaskNode(this.builderConfiguration.getTaskNodeInsertBeanList(), this.builderConfiguration.getTargetTask());
 		this.taskEngine.prepare(this.rootTaskNodeList,this.excludeTaskNodeNameList);
 		return this.taskNodeMap;
 	}
@@ -61,10 +67,53 @@ public class CommonBuilder implements Builder {
 	}
 
 	/**
+	 * filter task by target task node name
+	 * @param taskNodeInsertBeanList
+	 * @param targetTaskNodeName
+	 * @return List<TaskNodeInsertBean>
+	 */
+	private List<TaskNodeInsertBean> filterTaskByTargetTaskNodeName(List<TaskNodeInsertBean> taskNodeInsertBeanList, String targetTaskNodeName){
+		List<TaskNodeInsertBean> list=new ArrayList<TaskNodeInsertBean>();
+		if(taskNodeInsertBeanList!=null){
+			Map<String, TaskNodeInsertBean> map=new HashMap<String, TaskNodeInsertBean>();
+			for(TaskNodeInsertBean taskNodeInsertBean:taskNodeInsertBeanList){
+				String taskNodeName=taskNodeInsertBean.getName();
+				map.put(taskNodeName, taskNodeInsertBean);
+			}
+			if(map.containsKey(targetTaskNodeName)){
+				Queue<String> taskNodeNameQueue=new ConcurrentLinkedQueue<String>(); 
+				taskNodeNameQueue.add(targetTaskNodeName);
+				Set<String> taskNodeNameSet=new HashSet<String>();
+				while(!taskNodeNameQueue.isEmpty()){
+					String taskNodeName=taskNodeNameQueue.poll();
+					taskNodeNameSet.add(taskNodeName);
+					TaskNodeInsertBean taskNodeInsertBean=map.get(taskNodeName);
+					if(taskNodeInsertBean!=null){
+						list.add(taskNodeInsertBean);
+						String[] parentNames=taskNodeInsertBean.getParentNames();
+						if(parentNames!=null){
+							for(String parentName:parentNames){
+								if(!taskNodeNameSet.contains(parentName)){
+									taskNodeNameQueue.add(parentName);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return list;
+	}
+
+	/**
 	 * insert task node
 	 * @param taskNodeInsertBeanList
+	 * @param targetTaskNodeName
 	 */
-	protected void insertTaskNode(List<TaskNodeInsertBean> taskNodeInsertBeanList){
+	protected void insertTaskNode(List<TaskNodeInsertBean> taskNodeInsertBeanList, String targetTaskNodeName){
+		if(StringUtil.isNotBlank(targetTaskNodeName)){
+			taskNodeInsertBeanList=this.filterTaskByTargetTaskNodeName(taskNodeInsertBeanList, targetTaskNodeName);
+		}
 		if(taskNodeInsertBeanList!=null&&!taskNodeInsertBeanList.isEmpty()){
 			for(TaskNodeInsertBean taskNodeInsertBean:taskNodeInsertBeanList){
 				TaskNode taskNode=new TaskNode();
@@ -90,7 +139,6 @@ public class CommonBuilder implements Builder {
 					}
 				});
 				String[] parentNames=taskNodeInsertBean.getParentNames();
-				String[] childNames=taskNodeInsertBean.getChildNames();
 				if(parentNames!=null){
 					for(String parentName:parentNames){
 						if(this.taskNodeMap.containsKey(parentName)){
@@ -101,17 +149,7 @@ public class CommonBuilder implements Builder {
 						}
 					}
 				}
-				if(childNames!=null){
-					for(String childName:childNames){
-						if(this.taskNodeMap.containsKey(childName)){
-							TaskNode childTaskNode=this.taskNodeMap.get(childName);
-							taskNode.addChildTaskNode(childTaskNode);
-						}else{
-							logger.warning("[WARNING]Insert node("+taskNodeInsertBean.getName()+") set child task node name("+childName+") is not exist");
-						}
-					}
-				}
-				if((parentNames==null||parentNames.length==0)&&(childNames==null||childNames.length==0)){
+				if(parentNames==null||parentNames.length==0){
 					this.rootTaskNodeList.add(taskNode);
 				}
 				if(taskNodeInsertBean.isSkip()){

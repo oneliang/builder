@@ -3,11 +3,29 @@
 <builder>
 	<configuration-class type="com.oneliang.tools.builder.base.Configuration"/>
 
+	<handler name="a" type="com.oneliang.tools.builder.base.BaseHandler">
+		<command value="javac -help"/>
+	</handler>
+
+	<handler name="b" type="com.oneliang.tools.builder.base.BaseHandler">
+		<command value="javac -help"/>
+	</handler>
+
 	<handler name="clean" type="com.oneliang.tools.builder.base.BaseHandler">
 		<command value="javac -help"/>
 	</handler>
 
+	<task-node-insert name="a">
+		<handler-name value="a"/>
+	</task-node-insert>
+
+	<task-node-insert name="b">
+		<parent-name value="a"/>
+		<handler-name value="b"/>
+	</task-node-insert>
+
 	<task-node-insert name="clean">
+		<parent-name value="a"/>
 		<handler-name value="clean"/>
 	</task-node-insert>
 
