@@ -674,9 +674,9 @@ public final class BuilderUtil {
 					}
 					process = Runtime.getRuntime().exec(commandArray,environmentParameter);
 				}
-				Thread errorInputThread = new Thread(new ProcessRunnable(ProcessRunnable.TAG_ERROR, process.getErrorStream(), needToLogError));
+				Thread errorInputThread = new Thread(new ProcessRunnable(ProcessRunnable.TYPE_ERROR, process.getErrorStream(), needToLogError));
 				errorInputThread.start();
-				Thread inputThread = new Thread(new ProcessRunnable(ProcessRunnable.TAG_NORMAL, process.getInputStream(), needToLogNormal));
+				Thread inputThread = new Thread(new ProcessRunnable(ProcessRunnable.TYPE_NORMAL, process.getInputStream(), needToLogNormal));
 				inputThread.start();
 				result=process.waitFor();
 				errorInputThread.interrupt();
@@ -844,13 +844,13 @@ public final class BuilderUtil {
 	}
 
 	private static class ProcessRunnable implements Runnable{
-		private static final String TAG_ERROR="error";
-		private static final String TAG_NORMAL="normal";
+		private static final int TYPE_ERROR=1;
+		private static final int TYPE_NORMAL=2;
 		private InputStream inputStream=null;
-		private String tag=null;
+		private int type=TYPE_NORMAL;
 		private boolean needToLog=true;
-		public ProcessRunnable(String tag,InputStream inputStream,boolean needToLog) {
-			this.tag=tag;
+		public ProcessRunnable(int type,InputStream inputStream,boolean needToLog) {
+			this.type=type;
 			this.inputStream=inputStream;
 			this.needToLog=needToLog;
 		}
@@ -862,7 +862,11 @@ public final class BuilderUtil {
 				String string=null;
 				while((string=bufferedReader.readLine())!=null){
 					if(this.needToLog){
-						logger.info("["+this.tag+"]"+string);
+						if(this.type==TYPE_ERROR){
+							logger.error(string, null);
+						}else{
+							logger.info(string);
+						}
 					}
 				}
 			}catch(Exception e) {
