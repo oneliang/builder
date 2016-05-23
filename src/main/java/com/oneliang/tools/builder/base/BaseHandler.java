@@ -57,7 +57,7 @@ public class BaseHandler extends AbstractHandler {
 							for(String outputKey:outputKeyList){
 								Object outputValue=this.configuration.getTemporaryData(outputKey);
 								String value=outputValue==null?StringUtil.BLANK:outputValue.toString();
-								command=command.replaceFirst(regex, value);
+								command=command.replace(Constant.Symbol.BIG_BRACKET_LEFT+outputKey+Constant.Symbol.BIG_BRACKET_RIGHT, value);
 							}
 						}
 						String[] commandArray=command.split(StringUtil.SPACE);
@@ -67,6 +67,8 @@ public class BaseHandler extends AbstractHandler {
 								return false;
 							}
 						}catch (Exception e) {
+							logger.error(Constant.Base.EXCEPTION, e);
+							logger.error("Command execute failure:"+command, null);
 							return false;
 						}
 						break;

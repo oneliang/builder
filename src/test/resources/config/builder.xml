@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE builder SYSTEM "builder.dtd">
 <builder>
-	<configuration-class type="com.oneliang.tools.builder.base.Configuration"/>
+	<configuration-class type="com.oneliang.tools.builder.test.TestConfiguration"/>
 
 	<handler name="a" type="com.oneliang.tools.builder.base.BaseHandler">
-		<command value="javac -help"/>
+		<command value="rm -rf {a}"/>
 	</handler>
 
 	<handler name="b" type="com.oneliang.tools.builder.base.BaseHandler">
