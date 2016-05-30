@@ -393,25 +393,6 @@ public final class BuilderUtil {
 	}
 
 	/**
-	 * execute javac source directory
-	 * @param javacExecutorPath
-	 * @param classpathList
-	 * @param sourceDirectoryList
-	 * @param destinationDirectory
-	 */
-	public static void executeJavacSourceDirectory(String javacExecutorPath,List<String> classpathList,List<String> sourceDirectoryList,String destinationDirectory){
-		List<String> sourceList=new ArrayList<String>();
-		if(sourceDirectoryList!=null&&!sourceDirectoryList.isEmpty()){
-			for(String sourceDirectory:sourceDirectoryList){
-				sourceList.addAll(FileUtil.findMatchFileDirectory(sourceDirectory,Constant.Symbol.DOT+Constant.File.JAVA,"/*.java"));
-			}
-		}else{
-			throw new BuildException("source directory list can not be null or empty");
-		}
-		executeJavac(javacExecutorPath, classpathList, sourceList, destinationDirectory);
-	}
-
-	/**
 	 * execute javac source file
 	 * @param javacExecutorPath
 	 * @param classpathList
@@ -697,7 +678,7 @@ public final class BuilderUtil {
 	 * @returnList<String>
 	 */
 	public static List<String> findWantToGenerateResourceListWithCache(List<String> resourceDirectoryList,Properties cacheProperties){
-		return FileUtil.findFileListWithCache(resourceDirectoryList, cacheProperties, StringUtil.BLANK, null, true);
+		return FileUtil.findFileListWithCache(resourceDirectoryList, cacheProperties, StringUtil.BLANK, true);
 	}
 
 	/**
@@ -707,7 +688,7 @@ public final class BuilderUtil {
 	 * @return List<String>
 	 */
 	public static List<String> findWantToGenerateAidlListWithCache(List<String> sourceDirectoryList,Properties cacheProperties){
-		return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constant.Symbol.DOT+Constant.File.AIDL, null, true);
+		return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constant.Symbol.DOT+Constant.File.AIDL, true);
 	}
 
 	/**
@@ -718,7 +699,7 @@ public final class BuilderUtil {
 	 * @return List<String>
 	 */
 	public static List<String> findWantToCompileSourceListWithCache(List<String> sourceDirectoryList,Properties cacheProperties,boolean isFile){
-		return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constant.Symbol.DOT+Constant.File.JAVA, "/*.java", isFile);
+		return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constant.Symbol.DOT+Constant.File.JAVA, isFile);
 	}
 
 	/**
@@ -804,7 +785,7 @@ public final class BuilderUtil {
 	 * @param apkOutputFullFilename
 	 */
 	public static void generateApk(String directory,String apkOutputFullFilename){
-		List<String> outputFileList=FileUtil.findMatchFile(directory, StringUtil.BLANK);
+		List<String> outputFileList=FileUtil.findMatchFile(new FileUtil.MatchOption(directory));
 		List<ZipEntryPath> zipEntryPathList=new ArrayList<ZipEntryPath>();
 		int buildHomeFullFilenameLength=new File(directory).getAbsolutePath().length()+1;
 		List<String> noCompressList=generatingApkNoCompressList();

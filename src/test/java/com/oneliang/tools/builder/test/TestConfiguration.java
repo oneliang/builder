@@ -5,6 +5,7 @@ import com.oneliang.tools.builder.base.Configuration;
 public class TestConfiguration extends Configuration {
 
 	protected void initialize() {
-		this.temporaryDataMap.put("a", "D:\\split");
+		long begin=System.currentTimeMillis();
+		System.out.println("Cost:"+(System.currentTimeMillis()-begin));
 	}
 }

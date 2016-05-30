@@ -109,6 +109,10 @@ public class BuilderConfiguration {
 		this.initializeTaskNodeInsertBean();
 	}
 
+	/**
+	 * get target task
+	 * @return String
+	 */
 	public String getTargetTask() {
 		return targetTask;
 	}

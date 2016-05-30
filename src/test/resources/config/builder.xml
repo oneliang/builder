@@ -4,7 +4,7 @@
 	<configuration-class type="com.oneliang.tools.builder.test.TestConfiguration"/>
 
 	<handler name="a" type="com.oneliang.tools.builder.base.BaseHandler">
-		<command value="rm -rf {a}"/>
+		<command value="java -version"/>
 	</handler>
 
 	<handler name="b" type="com.oneliang.tools.builder.base.BaseHandler">

@@ -22,23 +22,23 @@ public class BaseHandler extends AbstractHandler {
 						HandlerBean handlerBean=configuration.getBuilderConfiguration().getHandlerBeanMap().get(handlerName);
 						if(handlerBean!=null){
 							String mode=handlerBean.getMode();
-							Handler handler=null;
+							Handler innerHandler=null;
 							if(mode.equals(HandlerBean.MODE_SINGLETON)){
-								handler=handlerBean.getInstance();
+								innerHandler=handlerBean.getInstance();
 							}else if(mode.equals(HandlerBean.MODE_MORE)){
-								handler=handlerBean.getInstance().clone();
+								innerHandler=handlerBean.getInstance().clone();
 							}
-							if(handler!=null){
+							if(innerHandler!=null){
 								try{
-									this.beforeInnerHandlerHandle(handler);
-									boolean result=handler.handle();
+									this.beforeInnerHandlerHandle(innerHandler);
+									boolean result=innerHandler.handle();
 									if(!result){
-										logger.error("Handler handle failure:"+handler, null);
+										logger.error("Handler handle failure:"+innerHandler, null);
 										return false;
 									}
 								}catch (Exception e) {
 									logger.error(Constant.Base.EXCEPTION, e);
-									logger.error("Handler handle failure:"+handler, null);
+									logger.error("Handler handle failure:"+innerHandler, null);
 									return false;
 								}
 							}
@@ -80,5 +80,9 @@ public class BaseHandler extends AbstractHandler {
 		return true;
 	}
 
-	protected void beforeInnerHandlerHandle(Handler handler){}
+	/**
+	 * before inner handler handle
+	 * @param innerHandler
+	 */
+	protected void beforeInnerHandlerHandle(Handler innerHandler){}
 }

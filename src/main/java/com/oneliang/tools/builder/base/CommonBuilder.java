@@ -78,6 +78,9 @@ public class CommonBuilder implements Builder {
 			Map<String, TaskNodeInsertBean> map=new HashMap<String, TaskNodeInsertBean>();
 			for(TaskNodeInsertBean taskNodeInsertBean:taskNodeInsertBeanList){
 				String taskNodeName=taskNodeInsertBean.getName();
+				if(taskNodeName.endsWith(targetTaskNodeName)){
+					targetTaskNodeName=taskNodeName;
+				}
 				map.put(taskNodeName, taskNodeInsertBean);
 			}
 			if(map.containsKey(targetTaskNodeName)){
@@ -86,7 +89,9 @@ public class CommonBuilder implements Builder {
 				Set<String> taskNodeNameSet=new HashSet<String>();
 				while(!taskNodeNameQueue.isEmpty()){
 					String taskNodeName=taskNodeNameQueue.poll();
-					taskNodeNameSet.add(taskNodeName);
+					if(!taskNodeNameSet.contains(taskNodeName)){
+						taskNodeNameSet.add(taskNodeName);
+					}
 					TaskNodeInsertBean taskNodeInsertBean=map.get(taskNodeName);
 					if(taskNodeInsertBean!=null){
 						list.add(taskNodeInsertBean);
@@ -94,12 +99,15 @@ public class CommonBuilder implements Builder {
 						if(parentNames!=null){
 							for(String parentName:parentNames){
 								if(!taskNodeNameSet.contains(parentName)){
+									taskNodeNameSet.add(parentName);
 									taskNodeNameQueue.add(parentName);
 								}
 							}
 						}
 					}
 				}
+			}else{
+				logger.warning("Can not find the "+BuilderConfiguration.MAP_KEY_TARGET_TASK+":"+targetTaskNodeName);
 			}
 		}
 		return list;
