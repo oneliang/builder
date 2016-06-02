@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.oneliang.tools.builder.base.BaseHandler;
 import com.oneliang.util.common.Generator;
 import com.oneliang.util.common.ObjectUtil;
 import com.oneliang.util.file.FileUtil;
@@ -47,7 +46,6 @@ public abstract class CacheHandler extends BaseHandler {
 		public String fileSuffix=null;
 		public CacheKeyProcessor cacheKeyProcessor=null;
 		public ChangedFileProcessor changedFileProcessor=null;
-		public boolean handleResult=false;
 		public CacheOption(String cacheFullFilename, List<String> directoryList) {
 			this.cacheFullFilename=cacheFullFilename;
 			this.directoryList=directoryList;
@@ -145,7 +143,6 @@ public abstract class CacheHandler extends BaseHandler {
 			needToSaveCache=cacheOption.changedFileProcessor.process(changedFileMap.values());
 		}
 		if(needToSaveCache){
-			cacheOption.handleResult=true;
 			try {
 				FileUtil.createFile(cacheOption.cacheFullFilename);
 				ObjectUtil.writeObject(cache, new FileOutputStream(cacheOption.cacheFullFilename));
@@ -155,25 +152,4 @@ public abstract class CacheHandler extends BaseHandler {
 		}
 		return cache;
 	}
-
-	public boolean handle() {
-		boolean handleResult=true;
-		List<CacheOption> cacheOptionList=this.getCacheOptionList();
-		if(cacheOptionList!=null){
-			for(CacheOption cacheOption:cacheOptionList){
-				this.dealWithCache(cacheOption);
-				if(!cacheOption.handleResult){
-					handleResult=false;
-					break;
-				}
-			}
-		}
-		return handleResult;
-	}
-
-	/**
-	 * get cache option list
-	 * @return List<CacheOption>
-	 */
-	protected abstract List<CacheOption> getCacheOptionList();
 }
