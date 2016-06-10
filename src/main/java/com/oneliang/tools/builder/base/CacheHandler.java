@@ -52,6 +52,10 @@ public abstract class CacheHandler extends BaseHandler {
 		}
 	}
 
+	private Class<?> getCacheHandlerClass(){
+		return getClass();
+	}
+
 	/**
 	 * deal with cache
 	 * @param cacheOption
@@ -88,7 +92,7 @@ public abstract class CacheHandler extends BaseHandler {
 								String oldFileMd5=oldCache.fileMd5Map.get(fullFilename);
 								String newFileMd5=Generator.MD5File(file.getAbsolutePath());
 								if(oldFileMd5.equals(newFileMd5)){
-									logger.debug("Same file:"+fullFilename);
+									logger.debug("[Handler:"+getCacheHandlerClass()+"]Same file:"+fullFilename);
 								}else{
 									logger.debug("Modify file:"+fullFilename);
 									cacheType=CACHE_TYPE_MODIFY;
