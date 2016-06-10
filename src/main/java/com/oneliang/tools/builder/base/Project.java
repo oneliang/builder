@@ -21,6 +21,8 @@ public class Project {
 	protected String[] dependProjects = null;
 	protected List<String> sourceDirectoryList = new ArrayList<String>();
 	protected List<String> dependJarList = new ArrayList<String>();
+	//use in building
+	private List<Project> parentProjectList = null;
 
 	public Project() {
 	}
@@ -176,5 +178,19 @@ public class Project {
 	 */
 	public String getPrepareOutput() {
 		return prepareOutput;
+	}
+
+	/**
+	 * @return the parentProjectList
+	 */
+	public List<Project> getParentProjectList() {
+		return parentProjectList;
+	}
+
+	/**
+	 * @param parentProjectList the parentProjectList to set
+	 */
+	public void setParentProjectList(List<Project> parentProjectList) {
+		this.parentProjectList = parentProjectList;
 	}
 }

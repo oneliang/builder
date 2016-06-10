@@ -47,13 +47,13 @@ public class Configuration {
 	/**
 	 * @return the projectList
 	 */
-	protected List<Project> getProjectList() {
+	public List<Project> getProjectList() {
 		return this.projectList;
 	}
 	/**
 	 * @return the projectMap
 	 */
-	protected Map<String, Project> getProjectMap() {
+	public Map<String, Project> getProjectMap() {
 		return this.projectMap;
 	}
 
