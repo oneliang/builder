@@ -27,15 +27,6 @@ public abstract class CacheHandler extends BaseHandler {
 		public String process(String directory, String fullFilename);
 	}
 
-	public static class ChangedFile{
-		public final String directory;
-		public final String fullFilename;
-		public ChangedFile(String directory, String fullFilename) {
-			this.directory=directory;
-			this.fullFilename=fullFilename;
-		}
-	}
-
 	public static interface ChangedFileProcessor{
 		public boolean process(Iterable<ChangedFile> changedFileIterable);
 	}
@@ -94,11 +85,11 @@ public abstract class CacheHandler extends BaseHandler {
 								if(oldFileMd5.equals(newFileMd5)){
 									logger.debug("[Handler:"+getCacheHandlerClass()+"]Same file:"+fullFilename);
 								}else{
-									logger.debug("Modify file:"+fullFilename);
+									logger.debug("[Handler:"+getCacheHandlerClass()+"]Modify file:"+fullFilename);
 									cacheType=CACHE_TYPE_MODIFY;
 								}
 							}else{
-								logger.debug("Incremental file:"+fullFilename);
+								logger.debug("[Handler:"+getCacheHandlerClass()+"]Incremental file:"+fullFilename);
 								cacheType=CACHE_TYPE_INCREMENTAL;
 							}
 						}else{
@@ -138,6 +129,7 @@ public abstract class CacheHandler extends BaseHandler {
 		}
 		cache.incrementalFileMd5Map=incrementalFileMd5Map;
 		cache.modifiedFileMd5Map=modifiedFileMd5Map;
+		cache.changedFileMap=changedFileMap;
 		logger.debug("Changed size:"+fileMd5Map.size());
 		logger.debug("All size:"+cache.fileMd5Map.size());
 		logger.debug("Incremental size:"+cache.incrementalFileMd5Map.size());

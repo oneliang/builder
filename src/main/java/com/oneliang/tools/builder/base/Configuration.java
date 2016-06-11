@@ -7,16 +7,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.oneliang.tools.builder.base.BuilderConfiguration.HandlerBean;
 import com.oneliang.tools.builder.base.BuilderConfiguration.TaskNodeInsertBean;
+import com.oneliang.util.logging.Logger;
+import com.oneliang.util.logging.LoggerManager;
 
 /**
  * project environment configuration
  */
 public class Configuration {
 
+	protected static final Logger logger=LoggerManager.getLogger(Configuration.class);
+
 	protected BuilderConfiguration builderConfiguration=null;
 	protected Map<String,Object> temporaryDataMap=new ConcurrentHashMap<String, Object>();
-	protected IDEInitializer ideInitializer=null;
-	protected ProjectInitializer projectInitializer=null;
 
 	protected final List<Project> projectList=new CopyOnWriteArrayList<Project>();
 	protected final Map<String, Project> projectMap=new ConcurrentHashMap<String, Project>();
@@ -115,38 +117,6 @@ public class Configuration {
 	 */
 	public Object getTemporaryData(String key){
 		return this.temporaryDataMap.get(key);
-	}
-
-	public static interface IDEInitializer{
-
-		/**
-		 * initialize all project from ide
-		 */
-		public void initializeAllProjectFromIDE();
-	
-		/**
-		 * parsing project.properties
-		 * @param Project
-		 * @param key
-		 * @param value
-		 */
-		public void parsingProjectProperties(Project Project,String key,String value);
-
-		/**
-		 * is source directory when parsing classpath
-		 * @param Project
-		 * @param sourceDirectory
-		 * @return boolean
-		 */
-		public boolean isSourceDirectory(Project Project, String sourceDirectory);
-	}
-
-	public static interface ProjectInitializer{
-		/**
-		 * read project other properties,just read what you want
-		 * @param project
-		 */
-		public void readProjectOtherProperties(Project project);
 	}
 
 	protected static class ConfigurationException extends RuntimeException {
