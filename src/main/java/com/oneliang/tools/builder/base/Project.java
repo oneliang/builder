@@ -49,6 +49,10 @@ public class Project {
 		this.classesOutput=this.outputHome+"/"+CLASSES;
 		this.cacheOutput=this.outputHome+"/"+CACHE;
 		this.prepareOutput=this.outputHome+"/prepare";
+		this.sourceDirectoryList.clear();
+		for (String source : this.sources) {
+			this.sourceDirectoryList.add(this.home + "/" + source);
+		}
 	}
 
 	/**
@@ -95,10 +99,6 @@ public class Project {
 	public void setSources(String[] sources) {
 		if (sources != null && sources.length > 0) {
 			this.sources = sources;
-		}
-		this.sourceDirectoryList.clear();
-		for (String source : this.sources) {
-			this.sourceDirectoryList.add(this.home + "/" + source);
 		}
 	}
 
