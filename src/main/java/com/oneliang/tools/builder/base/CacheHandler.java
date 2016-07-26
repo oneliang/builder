@@ -60,8 +60,8 @@ public abstract class CacheHandler extends BaseHandler {
 		if(FileUtil.isExist(cacheOption.cacheFullFilename)){
 			try {
 				existCache=(Cache)ObjectUtil.readObject(new FileInputStream(cacheOption.cacheFullFilename));
-			} catch (FileNotFoundException e) {
-				logger.warning("File not found:"+cacheOption.cacheFullFilename);
+			} catch (Exception e) {
+				logger.warning("Read cache error:"+cacheOption.cacheFullFilename);
 			}
 		}
 		
@@ -78,30 +78,30 @@ public abstract class CacheHandler extends BaseHandler {
 					public String onMatch(File file) {
 						String fullFilename=file.getAbsolutePath();
 						int cacheType=CACHE_TYPE_DEFAULT;
+						String key=null;
+						if(cacheOption.cacheKeyProcessor!=null){
+							key=cacheOption.cacheKeyProcessor.process(directory, fullFilename);
+						}else{
+							key=fullFilename;
+						}
 						if(oldCache!=null){
-							if(oldCache.fileMd5Map!=null&&oldCache.fileMd5Map.containsKey(fullFilename)){
-								String oldFileMd5=oldCache.fileMd5Map.get(fullFilename);
+							if(oldCache.fileMd5Map!=null&&oldCache.fileMd5Map.containsKey(key)){
+								String oldFileMd5=oldCache.fileMd5Map.get(key);
 								String newFileMd5=Generator.MD5File(file.getAbsolutePath());
 								if(oldFileMd5.equals(newFileMd5)){
-									logger.debug("[Handler:"+getCacheHandlerClass()+"]Same file:"+fullFilename);
+									logger.verbose("[Handler:"+getCacheHandlerClass()+"]Same file:"+key);
 								}else{
-									logger.debug("[Handler:"+getCacheHandlerClass()+"]Modify file:"+fullFilename);
+									logger.debug("[Handler:"+getCacheHandlerClass()+"]Modify file:"+key);
 									cacheType=CACHE_TYPE_MODIFY;
 								}
 							}else{
-								logger.debug("[Handler:"+getCacheHandlerClass()+"]Incremental file:"+fullFilename);
+								logger.debug("[Handler:"+getCacheHandlerClass()+"]Incremental file:"+key);
 								cacheType=CACHE_TYPE_INCREMENTAL;
 							}
 						}else{
 							cacheType=CACHE_TYPE_NO_CACHE;
 						}
 						if(cacheType!=0){
-							String key=null;
-							if(cacheOption.cacheKeyProcessor!=null){
-								key=cacheOption.cacheKeyProcessor.process(directory, fullFilename);
-							}else{
-								key=fullFilename;
-							}
 							String newFileMd5=Generator.MD5File(file.getAbsolutePath());
 							fileMd5Map.put(key, newFileMd5);
 							changedFileMap.put(key, new ChangedFile(directory, fullFilename));
