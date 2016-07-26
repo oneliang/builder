@@ -113,8 +113,8 @@ public class Project {
 	 * @param dependJarList
 	 *            the dependJarList to set
 	 */
-	public void setDependJarList(List<String> dependJarList) {
-		this.dependJarList = dependJarList;
+	public void addDependJar(String dependJar) {
+		this.dependJarList.add(dependJar);
 	}
 
 	/**
