@@ -24,6 +24,12 @@ public abstract class CacheHandler extends BaseHandler {
 	private static final int CACHE_TYPE_MODIFY=3;
 
 	public static interface CacheKeyProcessor{
+		/**
+		 * process
+		 * @param directory
+		 * @param fullFilename
+		 * @return String, ignore when return null
+		 */
 		public String process(String directory, String fullFilename);
 	}
 
@@ -64,7 +70,6 @@ public abstract class CacheHandler extends BaseHandler {
 				logger.warning("Read cache error:"+cacheOption.cacheFullFilename);
 			}
 		}
-		
 		final Cache oldCache=existCache;
 		final Map<String,String> fileMd5Map=new HashMap<String,String>();
 		final Map<String,String> incrementalFileMd5Map=new HashMap<String,String>();
@@ -84,6 +89,9 @@ public abstract class CacheHandler extends BaseHandler {
 						}else{
 							key=fullFilename;
 						}
+						if(key==null){
+							return null;
+						}
 						if(oldCache!=null){
 							if(oldCache.fileMd5Map!=null&&oldCache.fileMd5Map.containsKey(key)){
 								String oldFileMd5=oldCache.fileMd5Map.get(key);
@@ -101,10 +109,10 @@ public abstract class CacheHandler extends BaseHandler {
 						}else{
 							cacheType=CACHE_TYPE_NO_CACHE;
 						}
-						if(cacheType!=0){
+						if(cacheType!=CACHE_TYPE_DEFAULT){
 							String newFileMd5=Generator.MD5File(file.getAbsolutePath());
 							fileMd5Map.put(key, newFileMd5);
-							changedFileMap.put(key, new ChangedFile(directory, fullFilename));
+							changedFileMap.put(key, new ChangedFile(key, directory, fullFilename));
 							switch (cacheType) {
 							case CACHE_TYPE_INCREMENTAL:
 								incrementalFileMd5Map.put(key, newFileMd5);
