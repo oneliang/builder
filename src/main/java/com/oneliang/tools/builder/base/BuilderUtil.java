@@ -373,34 +373,23 @@ public final class BuilderUtil {
 	 * @return int
 	 */
 	private static int executeJava(String javaExecutorPath,String classpath,String className,String jarFullFilename,List<String> argumentList,boolean isExecuteJar,boolean needToLogCommand){
-		StringBuilder commandStringBuilder=new StringBuilder();
+		List<String> parameterList=new ArrayList<String>();
 		if(javaExecutorPath.indexOf(StringUtil.SPACE)>0&&BuilderUtil.isWindowsOS()){
 			javaExecutorPath=Constant.Symbol.DOUBLE_QUOTES+javaExecutorPath+Constant.Symbol.DOUBLE_QUOTES;
 		}
-		commandStringBuilder.append(javaExecutorPath+StringUtil.SPACE);
+		parameterList.add(javaExecutorPath);
 		if(isExecuteJar){
-			commandStringBuilder.append("-jar"+StringUtil.SPACE);
-			commandStringBuilder.append(jarFullFilename+StringUtil.SPACE);
+			parameterList.add("-jar");
+			parameterList.add(jarFullFilename);
 		}else{
-			commandStringBuilder.append("-classpath"+StringUtil.SPACE);
-			commandStringBuilder.append(classpath+StringUtil.SPACE);
-			commandStringBuilder.append(className+StringUtil.SPACE);
+			parameterList.add("-classpath");
+			parameterList.add(classpath);
+			parameterList.add(className);
 		}
 		if(argumentList!=null){
-			commandStringBuilder.append(listToCommandString(argumentList, null, StringUtil.SPACE));
+			parameterList.addAll(argumentList);//(listToCommandString(argumentList, null, StringUtil.SPACE));
 		}
-		return executeCommand(new String[]{commandStringBuilder.toString()},needToLogCommand);
-	}
-
-	/**
-	 * execute javac source file
-	 * @param javacExecutorPath
-	 * @param classpathList
-	 * @param sourceFileList
-	 * @param destinationDirectory
-	 */
-	public static void executeJavacSourceFile(String javacExecutorPath,List<String> classpathList,List<String> sourceFileList,String destinationDirectory){
-		executeJavac(javacExecutorPath, classpathList, sourceFileList, destinationDirectory);
+		return executeCommand(parameterList.toArray(new String[0]),needToLogCommand);
 	}
 
 	/**
@@ -410,34 +399,39 @@ public final class BuilderUtil {
 	 * @param sourceList
 	 * @param destinationDirectory
 	 */
-	public static void executeJavac(String javacExecutorPath,List<String> classpathList,List<String> sourceList,String destinationDirectory){
-		StringBuilder commandStringBuilder=new StringBuilder();
+	public static int executeJavac(String javacExecutorPath,List<String> classpathList,List<String> sourceList,String destinationDirectory, boolean isDebug){
+		List<String> parameterList=new ArrayList<String>();
 		if(javacExecutorPath.indexOf(StringUtil.SPACE)>0&&BuilderUtil.isWindowsOS()){
 			javacExecutorPath=Constant.Symbol.DOUBLE_QUOTES+javacExecutorPath+Constant.Symbol.DOUBLE_QUOTES;
 		}
-		commandStringBuilder.append(javacExecutorPath+StringUtil.SPACE);
+		parameterList.add(javacExecutorPath);
 //		commandStringBuilder.append("-verbose"+StringUtil.SPACE);
 		if(classpathList!=null&&!classpathList.isEmpty()){
-			commandStringBuilder.append("-classpath"+StringUtil.SPACE);
+			parameterList.add("-classpath");
 			String seperator=isWindowsOS?Constant.Symbol.SEMICOLON:Constant.Symbol.COLON;
-			commandStringBuilder.append(listToCommandString(classpathList, null, seperator)+StringUtil.SPACE);
+			parameterList.add(listToCommandString(classpathList, null, seperator));
 		}
-//		commandStringBuilder.append("-sourcepath"+StringUtil.SPACE);
-//		commandStringBuilder.append(listToCommandString(sourceDirectoryList,null,Constant.Symbol.SEMICOLON)+StringUtil.SPACE);
-		commandStringBuilder.append("-nowarn"+StringUtil.SPACE);
-		commandStringBuilder.append("-d"+StringUtil.SPACE);
-		commandStringBuilder.append(destinationDirectory+StringUtil.SPACE);
-		commandStringBuilder.append("-encoding"+StringUtil.SPACE);
-		commandStringBuilder.append(Constant.Encoding.UTF8+StringUtil.SPACE);
+//		parameterList.add("-sourcepath");
+//		parameterList.add(listToCommandString(sourceDirectoryList,null,Constant.Symbol.SEMICOLON));
+		if(isDebug){
+			parameterList.add("-g");
+		}
+		parameterList.add("-nowarn");
+		parameterList.add("-d");
+		parameterList.add(destinationDirectory);
+		parameterList.add("-encoding");
+		parameterList.add(Constant.Encoding.UTF8);
 		if(sourceList!=null&&!sourceList.isEmpty()){
-			commandStringBuilder.append(listToCommandString(sourceList, null, StringUtil.SPACE));
+			parameterList.add(listToCommandString(sourceList, null, StringUtil.SPACE));
 		}else{
 			throw new BuildException("source list can not be null or empty");
 		}
 		if(isWindowsOS){
-			executeCommand(new String[]{commandStringBuilder.toString()});
+			return executeCommand(parameterList.toArray(new String[0]));
 		}else{
-			executeCommand(new String[]{"sh","-c",commandStringBuilder.toString()});
+			parameterList.add(0, "sh");
+			parameterList.add(1, "-c");
+			return executeCommand(parameterList.toArray(new String[0]));
 		}
 	}
 
@@ -524,13 +518,13 @@ public final class BuilderUtil {
 	 * @param keyStore
 	 * @param storePassword
 	 * @param keyPassword
-	 * @param signerApkOutputFullFilename
-	 * @param unsingerApkFullFilename
+	 * @param signedApkOutputFullFilename
+	 * @param unsingedApkFullFilename
 	 * @param digestalg
 	 * @param sigalg
 	 * @return int,exit code
 	 */
-	public static int executeJarSigner(String jarSingerExecutorPath,String keyStore,String storePassword,String keyPassword,String alias,String signerApkOutputFullFilename,String unsingerApkFullFilename,String digestalg,String sigalg){
+	public static int executeJarSigner(String jarSingerExecutorPath,String keyStore,String storePassword,String keyPassword,String alias,String signedApkOutputFullFilename,String unsingedApkFullFilename,String digestalg,String sigalg){
 		StringBuilder commandStringBuilder=new StringBuilder();
 		if(jarSingerExecutorPath.indexOf(StringUtil.SPACE)>0&&BuilderUtil.isWindowsOS()){
 			jarSingerExecutorPath=Constant.Symbol.DOUBLE_QUOTES+jarSingerExecutorPath+Constant.Symbol.DOUBLE_QUOTES;
@@ -546,8 +540,8 @@ public final class BuilderUtil {
 		commandStringBuilder.append("-keypass"+StringUtil.SPACE);
 		commandStringBuilder.append(keyPassword+StringUtil.SPACE);
 		commandStringBuilder.append("-signedjar"+StringUtil.SPACE);
-		commandStringBuilder.append(signerApkOutputFullFilename+StringUtil.SPACE);
-		commandStringBuilder.append(unsingerApkFullFilename+StringUtil.SPACE);
+		commandStringBuilder.append(signedApkOutputFullFilename+StringUtil.SPACE);
+		commandStringBuilder.append(unsingedApkFullFilename+StringUtil.SPACE);
 		commandStringBuilder.append(alias+StringUtil.SPACE);
 		commandStringBuilder.append("-digestalg"+StringUtil.SPACE);
 		commandStringBuilder.append(digestalg+StringUtil.SPACE);
