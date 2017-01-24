@@ -7,21 +7,21 @@ import java.util.List;
 public class Project {
 
 	public static final String SRC = "src";
-	public static final String CLASSES="classes";
-	public static final String CACHE="cache";
+	public static final String CLASSES = "classes";
+	public static final String CACHE = "cache";
 
 	protected String workspace = null;
 	protected String name = null;
 	protected String home = null;
 	protected String outputHome = null;
-	protected String classesOutput=null;
-	protected String cacheOutput=null;
-	protected String prepareOutput=null;
+	protected String classesOutput = null;
+	protected String cacheOutput = null;
+	protected String prepareOutput = null;
 	protected String[] sources = new String[] { SRC };
 	protected String[] dependProjects = null;
 	protected List<String> sourceDirectoryList = new ArrayList<String>();
 	protected List<String> dependJarList = new ArrayList<String>();
-	//use in building
+	// use in building
 	private List<Project> parentProjectList = null;
 
 	public Project() {
@@ -32,23 +32,23 @@ public class Project {
 	}
 
 	public Project(String workspace, String name, String outputHome) {
-		if(workspace==null||name==null){
+		if (workspace == null || name == null) {
 			throw new NullPointerException("workspace or name is null");
 		}
-		this.workspace=workspace;
-		this.name=name;
-		this.outputHome=outputHome;
+		this.workspace = workspace;
+		this.name = name;
+		this.outputHome = outputHome;
 	}
 
-	public void initialize(){
-		File file=new File(this.workspace);
-		this.workspace=file.getAbsolutePath();
-		this.home=this.workspace+"/"+this.name;
-		file=new File(this.outputHome);
-		this.outputHome=file.getAbsolutePath()+"/"+this.name;
-		this.classesOutput=this.outputHome+"/"+CLASSES;
-		this.cacheOutput=this.outputHome+"/"+CACHE;
-		this.prepareOutput=this.outputHome+"/prepare";
+	public void initialize() {
+		File file = new File(this.workspace);
+		this.workspace = file.getAbsolutePath();
+		this.home = this.workspace + "/" + this.name;
+		file = new File(this.outputHome);
+		this.outputHome = file.getAbsolutePath() + "/" + this.name;
+		this.classesOutput = this.outputHome + "/" + CLASSES;
+		this.cacheOutput = this.outputHome + "/" + CACHE;
+		this.prepareOutput = this.outputHome + "/prepare";
 		this.sourceDirectoryList.clear();
 		for (String source : this.sources) {
 			this.sourceDirectoryList.add(this.home + "/" + source);
@@ -125,7 +125,8 @@ public class Project {
 	}
 
 	/**
-	 * @param outputHome the outputHome to set
+	 * @param outputHome
+	 *            the outputHome to set
 	 */
 	public void setOutputHome(String outputHome) {
 		this.outputHome = outputHome;
@@ -139,7 +140,8 @@ public class Project {
 	}
 
 	/**
-	 * @param classesOutput the classesOutput to set
+	 * @param classesOutput
+	 *            the classesOutput to set
 	 */
 	public void setClassesOutput(String classesOutput) {
 		this.classesOutput = classesOutput;
@@ -167,7 +169,8 @@ public class Project {
 	}
 
 	/**
-	 * @param dependProjects the dependProjects to set
+	 * @param dependProjects
+	 *            the dependProjects to set
 	 */
 	public void setDependProjects(String[] dependProjects) {
 		this.dependProjects = dependProjects;
@@ -188,7 +191,8 @@ public class Project {
 	}
 
 	/**
-	 * @param parentProjectList the parentProjectList to set
+	 * @param parentProjectList
+	 *            the parentProjectList to set
 	 */
 	public void setParentProjectList(List<Project> parentProjectList) {
 		this.parentProjectList = parentProjectList;
