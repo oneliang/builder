@@ -66,8 +66,8 @@ public final class BuilderUtil {
      * array to command string
      * 
      * @param stringArray
-     * @param appendString
-     * @param seperator
+     * @param appendString can null
+     * @param seperator can not null
      * @return String
      */
     public static String arrayToCommandString(String[] stringArray, String appendString, String seperator) {
