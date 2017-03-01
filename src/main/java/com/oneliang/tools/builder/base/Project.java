@@ -49,7 +49,6 @@ public class Project {
 		this.classesOutput = this.outputHome + "/" + CLASSES;
 		this.cacheOutput = this.outputHome + "/" + CACHE;
 		this.prepareOutput = this.outputHome + "/prepare";
-		this.sourceDirectoryList.clear();
 		for (String source : this.sources) {
 			this.sourceDirectoryList.add(this.home + "/" + source);
 		}
