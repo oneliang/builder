@@ -6,6 +6,6 @@ public class TestConfiguration extends Configuration {
 
 	protected void initialize() {
 		long begin=System.currentTimeMillis();
-		System.out.println("Cost:"+(System.currentTimeMillis()-begin));
+		System.out.println("TestConfiguration.initialize,cost:"+(System.currentTimeMillis()-begin));
 	}
 }

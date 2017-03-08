@@ -15,6 +15,8 @@
 		<command value="javac -help"/>
 	</handler>
 
+    <handler name="test" type="com.oneliang.tools.builder.test.TestCacheHandler"/>
+
 	<task-node-insert name="a">
 		<handler-name value="a"/>
 	</task-node-insert>
@@ -29,4 +31,7 @@
 		<handler-name value="clean"/>
 	</task-node-insert>
 
+    <task-node-insert name="test">
+        <handler-name value="test"/>
+    </task-node-insert>
 </builder>
