@@ -124,6 +124,7 @@ public abstract class CacheHandler extends BaseHandler {
                             cacheFileMap.put(key, new CacheFile(newFileMd5, directory, fullFilename));
                             switch (cacheType) {
                             case CACHE_TYPE_ADDED:
+                            case CACHE_TYPE_NO_CACHE:
                                 addedFileMd5Map.put(key, newFileMd5);
                                 changedFileMap.put(key, new ChangedFile(ChangedFile.Status.ADDED, key, directory, fullFilename));
                                 break;

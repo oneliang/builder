@@ -23,7 +23,7 @@ public class TestCacheHandler extends CacheHandler {
                 for (ChangedFile changedFile : changedFileIterable) {
                     logger.debug("status:" + changedFile.status + ",key:" + changedFile.key + ",path:" + changedFile.fullFilename);
                 }
-                return false;
+                return true;
             }
         };
         this.dealWithCache(cacheOption);
