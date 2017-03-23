@@ -173,7 +173,7 @@ public class CommonBuilder implements Builder {
      * exit
      */
     protected final void exit(String message) {
-        logger.error("----------COMPILE FAILURE----------:" + message, null);
+        logger.error("----------BUILD FAILURE----------:" + message, null);
         System.exit(1);
     }
 }
