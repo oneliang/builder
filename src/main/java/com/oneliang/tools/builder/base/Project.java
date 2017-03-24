@@ -6,7 +6,6 @@ import java.util.List;
 
 public class Project {
 
-	public static final String SRC = "src";
 	public static final String CLASSES = "classes";
 	public static final String CACHE = "cache";
 
@@ -17,7 +16,7 @@ public class Project {
 	protected String classesOutput = null;
 	protected String cacheOutput = null;
 	protected String prepareOutput = null;
-	protected String[] sources = new String[] { SRC };
+	protected String[] sources = null;
 	protected String[] dependProjects = null;
 	protected List<String> sourceDirectoryList = new ArrayList<String>();
 	protected List<String> dependJarList = new ArrayList<String>();
@@ -49,9 +48,6 @@ public class Project {
 		this.classesOutput = this.outputHome + "/" + CLASSES;
 		this.cacheOutput = this.outputHome + "/" + CACHE;
 		this.prepareOutput = this.outputHome + "/prepare";
-		for (String source : this.sources) {
-			this.sourceDirectoryList.add(this.home + "/" + source);
-		}
 	}
 
 	/**
