@@ -8,7 +8,7 @@ public class Project {
 
     public static final String CLASSES = "classes";
     public static final String CACHE = "cache";
-    private static final String BUILD = "build";
+    public static final String BUILD = "build";
 
     protected String workspace = null;
     protected String name = null;
