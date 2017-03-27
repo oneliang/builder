@@ -196,6 +196,9 @@ public final class BuilderUtil {
                     for (String attributeName : manifestAttributeNameSet) {
                         ((Element) manifestNodeList.item(0)).setAttribute(attributeName, manifestAttributeMap.get(attributeName));
                     }
+                    if (StringUtil.isNotBlank(packageName)) {
+                        ((Element) manifestNodeList.item(0)).setAttribute("package", packageName);
+                    }
                 }
                 // application
                 NodeList applicationNodeList = document.getElementsByTagName("application");
