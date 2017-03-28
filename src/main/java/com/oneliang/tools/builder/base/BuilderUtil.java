@@ -95,8 +95,9 @@ public final class BuilderUtil {
      * @param packageName
      * @param allAndroidManifestList
      * @param androidManifestOutputFullFilename
+     * @param isDebug
      */
-    public static void mergeAndroidManifest(String packageName, List<String> allAndroidManifestList, String androidManifestOutputFullFilename, boolean isDebug) {
+    public static void mergeAndroidManifest(String packageName, int minSdkVersion, int targetSdkVersion, List<String> allAndroidManifestList, String androidManifestOutputFullFilename, boolean isDebug) {
         if (allAndroidManifestList == null || allAndroidManifestList.isEmpty()) {
             return;
         }
@@ -189,6 +190,11 @@ public final class BuilderUtil {
                 for (Node node : needAddPermissionNodeList) {
                     root.appendChild(document.importNode(node, true));
                 }
+                // sdk version
+                Element sdkVersionElement = document.createElement("uses-sdk");
+                sdkVersionElement.setAttribute("android:minSdkVersion", String.valueOf(minSdkVersion));
+                sdkVersionElement.setAttribute("android:targetSdkVersion", String.valueOf(targetSdkVersion));
+                root.appendChild(sdkVersionElement);
                 // manifest
                 NodeList manifestNodeList = document.getElementsByTagName("manifest");
                 if (manifestNodeList != null && manifestNodeList.getLength() > 0) {
