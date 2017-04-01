@@ -519,6 +519,10 @@ public final class BuilderUtil {
         if (isDebug) {
             parameterList.add("-g");
         }
+        parameterList.add("-source");
+        parameterList.add("1.7");
+        parameterList.add("-target");
+        parameterList.add("1.7");
         parameterList.add("-nowarn");
         parameterList.add("-d");
         parameterList.add(destinationDirectory);

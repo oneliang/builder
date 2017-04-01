@@ -160,11 +160,11 @@ public abstract class CacheHandler extends BaseHandler {
         cache.modifiedFileMd5Map = modifiedFileMd5Map;
         cache.deletedFileMd5Map = deletedFileMd5Map;
         cache.changedFileMap = changedFileMap;
-        logger.debug("Changed size:" + changedFileMap.size());
-        logger.debug("All size:" + cache.cacheFileMap.size());
-        logger.debug("Added size:" + cache.addedFileMd5Map.size());
-        logger.debug("Modified size:" + cache.modifiedFileMd5Map.size());
-        logger.debug("Deleted size:" + cache.deletedFileMd5Map.size());
+        logger.debug("[Handler:" + getCacheHandlerClass() + "]Changed size:" + changedFileMap.size());
+        logger.debug("[Handler:" + getCacheHandlerClass() + "]All size:" + cache.cacheFileMap.size());
+        logger.debug("[Handler:" + getCacheHandlerClass() + "]Added size:" + cache.addedFileMd5Map.size());
+        logger.debug("[Handler:" + getCacheHandlerClass() + "]Modified size:" + cache.modifiedFileMd5Map.size());
+        logger.debug("[Handler:" + getCacheHandlerClass() + "]Deleted size:" + cache.deletedFileMd5Map.size());
         boolean needToSaveCache = false;
         if (cacheOption.changedFileProcessor != null) {
             needToSaveCache = cacheOption.changedFileProcessor.process(changedFileMap.values());
