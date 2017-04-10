@@ -32,13 +32,21 @@ public class CommonBuilder implements Builder {
     protected long begin = System.currentTimeMillis();
 
     public CommonBuilder(BuilderConfiguration builderConfiguration) {
+        if (builderConfiguration == null) {
+            throw new NullPointerException("BuilderConfiguration can not be null.");
+        }
         this.builderConfiguration = builderConfiguration;
+        this.builderConfiguration.initialize();
         this.taskEngine = new TaskEngine(1, builderConfiguration.getMaxThreads());
         this.taskEngine.setTaskNodeTimeFile(this.builderConfiguration.getTaskNodeTimeFile());
     }
 
     public CommonBuilder(BuilderConfiguration builderConfiguration, TaskEngine taskEngine) {
+        if (builderConfiguration == null) {
+            throw new NullPointerException("BuilderConfiguration can not be null.");
+        }
         this.builderConfiguration = builderConfiguration;
+        builderConfiguration.initialize();
         this.taskEngine = taskEngine;
     }
 
@@ -64,6 +72,7 @@ public class CommonBuilder implements Builder {
         } else {
             logger.info("BUILD FAILURE,cost:" + minute + "m\t" + second + "s\t" + millisecond + "ms");
         }
+        this.builderConfiguration.destroy();
     }
 
     /**

@@ -31,7 +31,6 @@ public final class CommandLine {
 		if(builderConfiguration==null){
 			builderConfiguration=new BuilderConfiguration(builderConfigurationFullFilename, overrideArgs);
 		}
-		builderConfiguration.initialize();
 		if(taskEngine==null){
 			builder=new CommonBuilder(builderConfiguration);
 		}else{

@@ -112,6 +112,16 @@ public class BuilderConfiguration {
     }
 
     /**
+     * destroy
+     */
+    protected void destroy() {
+        if (this.configuration == null) {
+            throw new NullPointerException("configuration is null,please destroy() after initialize() ");
+        }
+        this.configuration.destroy();
+    }
+
+    /**
      * get target task
      * 
      * @return String

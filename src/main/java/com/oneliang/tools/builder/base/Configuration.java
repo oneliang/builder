@@ -34,6 +34,11 @@ public class Configuration {
 	protected void initializeAllProject(){}
 
 	/**
+	 * destroy
+	 */
+	protected void destroy(){}
+
+	/**
 	 * add android project
 	 * @param project
 	 */
