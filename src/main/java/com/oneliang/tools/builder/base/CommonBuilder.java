@@ -61,6 +61,7 @@ public class CommonBuilder implements Builder {
         this.taskEngine.execute();
         this.taskEngine.waiting();
         this.taskEngine.clean();
+        this.builderConfiguration.destroy();
         long cost = System.currentTimeMillis() - this.begin;
         Calendar costCalendar = Calendar.getInstance();
         costCalendar.setTimeInMillis(cost);
@@ -72,7 +73,6 @@ public class CommonBuilder implements Builder {
         } else {
             logger.info("BUILD FAILURE,cost:" + minute + "m\t" + second + "s\t" + millisecond + "ms");
         }
-        this.builderConfiguration.destroy();
     }
 
     /**
