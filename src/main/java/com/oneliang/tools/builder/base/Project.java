@@ -2,7 +2,9 @@ package com.oneliang.tools.builder.base;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Project {
 
@@ -20,7 +22,7 @@ public class Project {
     protected String[] sources = null;
     protected String[] dependProjects = null;
     protected List<String> sourceDirectoryList = new ArrayList<String>();
-    protected List<String> dependJarList = new ArrayList<String>();
+    protected Set<String> dependJarSet = new HashSet<String>();
     // use in building
     private List<Project> parentProjectList = null;
 
@@ -106,18 +108,18 @@ public class Project {
     }
 
     /**
-     * @param dependJarList
-     *            the dependJarList to set
+     * @param dependJarSet
+     *            the dependJarSet to set
      */
     public void addDependJar(String dependJar) {
-        this.dependJarList.add(dependJar);
+        this.dependJarSet.add(dependJar);
     }
 
     /**
-     * @return the dependJarList
+     * @return the dependJarSet
      */
-    public List<String> getDependJarList() {
-        return dependJarList;
+    public Set<String> getDependJarSet() {
+        return dependJarSet;
     }
 
     /**
