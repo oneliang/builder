@@ -575,9 +575,8 @@ public final class BuilderUtil {
         if (isWindowsOS) {
             return executeCommand(parameterList.toArray(new String[0]));
         } else {
-            parameterList.add(0, "sh");
-            parameterList.add(1, "-c");
-            return executeCommand(parameterList.toArray(new String[0]));
+            String[] commands = new String[] { "sh", "-c", "\"" + listToCommandString(parameterList, null, StringUtil.SPACE) + "\"" };
+            return executeCommand(commands);
         }
     }
 
