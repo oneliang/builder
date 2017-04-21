@@ -25,6 +25,7 @@ public abstract class CacheHandler extends BaseHandler {
     private static final int CACHE_TYPE_ADDED = 2;
     private static final int CACHE_TYPE_MODIFIED = 3;
     private static final int CACHE_TYPE_EQUAL = 4;
+    private final String cacheHandlerClassName = getClass().getName();
 
     public static class CacheOption {
         public final String cacheFullFilename;
@@ -52,10 +53,6 @@ public abstract class CacheHandler extends BaseHandler {
         public static interface ChangedFileProcessor {
             public boolean process(Iterable<ChangedFile> changedFileIterable);
         }
-    }
-
-    private Class<?> getCacheHandlerClass() {
-        return getClass();
     }
 
     /**
@@ -106,14 +103,14 @@ public abstract class CacheHandler extends BaseHandler {
                                 CacheFile oldCacheFile = oldCache.cacheFileMap.get(key);
                                 newFileMd5 = Generator.MD5File(file.getAbsolutePath());
                                 if (oldCacheFile.md5.equals(newFileMd5)) {
-                                    logger.verbose("[Handler:" + getCacheHandlerClass() + "]Same file:" + key);
+                                    logger.verbose("[Handler:" + cacheHandlerClassName + "]Same file:" + key);
                                     cacheType = CACHE_TYPE_EQUAL;
                                 } else {
-                                    logger.debug("[Handler:" + getCacheHandlerClass() + "]Modified file:" + key);
+                                    logger.debug("[Handler:" + cacheHandlerClassName + "]Modified file:" + key);
                                     cacheType = CACHE_TYPE_MODIFIED;
                                 }
                             } else {
-                                logger.debug("[Handler:" + getCacheHandlerClass() + "]Added file:" + key);
+                                logger.debug("[Handler:" + cacheHandlerClassName + "]Added file:" + key);
                                 cacheType = CACHE_TYPE_ADDED;
                             }
                         } else {
@@ -147,7 +144,7 @@ public abstract class CacheHandler extends BaseHandler {
                 if (cacheFileMap.containsKey(key)) {
                     continue;
                 }
-                logger.debug("[Handler:" + getCacheHandlerClass() + "]Deleted file:" + key);
+                logger.debug("[Handler:" + cacheHandlerClassName + "]Deleted file:" + key);
                 CacheFile oldCacheFile = oldCache.cacheFileMap.get(key);
                 deletedFileMd5Map.put(key, oldCacheFile.md5);
                 changedFileMap.put(key, new ChangedFile(ChangedFile.Status.DELETED, key, oldCacheFile.directory, oldCacheFile.fullFilename));
@@ -160,11 +157,11 @@ public abstract class CacheHandler extends BaseHandler {
         cache.modifiedFileMd5Map = modifiedFileMd5Map;
         cache.deletedFileMd5Map = deletedFileMd5Map;
         cache.changedFileMap = changedFileMap;
-        logger.debug("[Handler:" + getCacheHandlerClass() + "]Changed size:" + changedFileMap.size());
-        logger.debug("[Handler:" + getCacheHandlerClass() + "]All size:" + cache.cacheFileMap.size());
-        logger.debug("[Handler:" + getCacheHandlerClass() + "]Added size:" + cache.addedFileMd5Map.size());
-        logger.debug("[Handler:" + getCacheHandlerClass() + "]Modified size:" + cache.modifiedFileMd5Map.size());
-        logger.debug("[Handler:" + getCacheHandlerClass() + "]Deleted size:" + cache.deletedFileMd5Map.size());
+        logger.debug("[Handler:" + cacheHandlerClassName + "]All size:" + cache.cacheFileMap.size());
+        logger.debug("[Handler:" + cacheHandlerClassName + "]Changed size:" + changedFileMap.size());
+        logger.debug("[Handler:" + cacheHandlerClassName + "]Added size:" + cache.addedFileMd5Map.size());
+        logger.debug("[Handler:" + cacheHandlerClassName + "]Modified size:" + cache.modifiedFileMd5Map.size());
+        logger.debug("[Handler:" + cacheHandlerClassName + "]Deleted size:" + cache.deletedFileMd5Map.size());
         boolean needToSaveCache = false;
         if (cacheOption.changedFileProcessor != null) {
             needToSaveCache = cacheOption.changedFileProcessor.process(changedFileMap.values());
