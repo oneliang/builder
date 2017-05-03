@@ -509,20 +509,20 @@ public final class BuilderUtil {
         return executeCommand(parameterList.toArray(new String[0]), needToLogCommand);
     }
 
-    private static List<String> generateJavacParameterList(List<String> classpathList, List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> processorPathList) {
+    private static List<String> generateJavacParameterList(List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList, List<String> processorPathList, List<String> bootClasspathList, List<KeyValue<String, String>> otherParameterList) {
         List<String> parameterList = new ArrayList<String>();
         String seperator = isWindowsOS ? Constant.Symbol.SEMICOLON : Constant.Symbol.COLON;
         if (classpathList != null && !classpathList.isEmpty()) {
             parameterList.add("-classpath");
             parameterList.add(listToCommandString(classpathList, null, seperator));
         }
+        if (bootClasspathList != null && !bootClasspathList.isEmpty()) {
+            parameterList.add("-bootclasspath");
+            parameterList.add(listToCommandString(bootClasspathList, null, seperator));
+        }
         if (isDebug) {
             parameterList.add("-g");
         }
-        parameterList.add("-source");
-        parameterList.add("1.7");
-        parameterList.add("-target");
-        parameterList.add("1.7");
         parameterList.add("-nowarn");
         parameterList.add("-d");
         parameterList.add(destinationDirectory);
@@ -532,7 +532,12 @@ public final class BuilderUtil {
             parameterList.add("-processorpath");
             parameterList.add(listToCommandString(processorPathList, null, seperator));
         }
-
+        if (otherParameterList != null && !otherParameterList.isEmpty()) {
+            for (KeyValue<String, String> otherParameter : otherParameterList) {
+                parameterList.add(otherParameter.key);
+                parameterList.add(otherParameter.value);
+            }
+        }
         if (sourceList != null && !sourceList.isEmpty()) {
             for (String source : sourceList) {
                 parameterList.add(source);
@@ -547,31 +552,37 @@ public final class BuilderUtil {
      * execute javac
      * 
      * @param javacExecutorPath
-     * @param classpathList
      * @param sourceList
      * @param destinationDirectory
+     * @param isDebug
+     * @param classpathList
+     * @return int,exit code
      */
-    public static int executeJavac(String javacExecutorPath, List<String> classpathList, List<String> sourceList, String destinationDirectory, boolean isDebug) {
-        return executeJavac(javacExecutorPath, classpathList, sourceList, destinationDirectory, isDebug, null);
+    public static int executeJavac(String javacExecutorPath, List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList) {
+        return executeJavac(javacExecutorPath, sourceList, destinationDirectory, isDebug, classpathList, null, null, null);
     }
 
     /**
      * execute javac
      * 
      * @param javacExecutorPath
-     * @param classpathList
      * @param sourceList
      * @param destinationDirectory
+     * @param isDebug
+     * @param classpathList
      * @param processorPathList
+     * @param bootClasspathList
+     * @param otherParameterList
+     * @return int,exit code
      */
-    public static int executeJavac(String javacExecutorPath, List<String> classpathList, List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> processorPathList) {
+    public static int executeJavac(String javacExecutorPath, List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList, List<String> processorPathList, List<String> bootClasspathList, List<KeyValue<String, String>> otherParameterList) {
         List<String> parameterList = new ArrayList<String>();
         if (javacExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
             javacExecutorPath = Constant.Symbol.DOUBLE_QUOTES + javacExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
         }
         parameterList.add(javacExecutorPath);
         // commandStringBuilder.append("-verbose"+StringUtil.SPACE);
-        parameterList.addAll(generateJavacParameterList(classpathList, sourceList, destinationDirectory, isDebug, processorPathList));
+        parameterList.addAll(generateJavacParameterList(sourceList, destinationDirectory, isDebug, classpathList, processorPathList, bootClasspathList, otherParameterList));
         if (isWindowsOS) {
             return executeCommand(parameterList.toArray(new String[0]));
         } else {
@@ -583,29 +594,31 @@ public final class BuilderUtil {
     /**
      * tool.jar javac
      * 
-     * @param classpathList
      * @param sourceList
      * @param destinationDirectory
      * @param isDebug
+     * @param classpathList
      * @return int,exit code
      */
-    public static int javac(List<String> classpathList, List<String> sourceList, String destinationDirectory, boolean isDebug) {
-        return javac(classpathList, sourceList, destinationDirectory, isDebug, null);
+    public static int javac(List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList) {
+        return javac(sourceList, destinationDirectory, isDebug, classpathList, null, null, null);
     }
 
     /**
      * tool.jar javac
      * 
-     * @param classpathList
      * @param sourceList
      * @param destinationDirectory
      * @param isDebug
+     * @param classpathList
      * @param processorPathList
+     * @param bootClasspathList
+     * @param otherParameterList
      * @return int,exit code
      */
-    public static int javac(List<String> classpathList, List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> processorPathList) {
+    public static int javac(List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList, List<String> processorPathList, List<String> bootClasspathList, List<KeyValue<String, String>> otherParameterList) {
         List<String> parameterList = new ArrayList<String>();
-        parameterList.addAll(generateJavacParameterList(classpathList, sourceList, destinationDirectory, isDebug, processorPathList));
+        parameterList.addAll(generateJavacParameterList(sourceList, destinationDirectory, isDebug, classpathList, processorPathList, bootClasspathList, otherParameterList));
         return Main.compile(parameterList.toArray(new String[] {}));
     }
 
