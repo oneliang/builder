@@ -323,7 +323,7 @@ public class BuilderConfiguration {
             String handlerName = taskNodeInsertBean.getHandlerName();
             HandlerBean handlerBean = this.handlerBeanMap.get(handlerName);
             if (handlerBean == null) {
-                logger.error("Handler name is not exist.name:" + handlerName);
+                logger.warning("Handler name is not exist.task name:" + taskNodeInsertBean.getName() + ",handler name:" + handlerName);
                 continue;
             }
             String mode = handlerBean.getMode();
