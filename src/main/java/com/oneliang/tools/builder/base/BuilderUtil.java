@@ -978,8 +978,8 @@ public final class BuilderUtil {
     }
 
     public static class ProguardJarPair {
-        private String inputJar = null;
-        private String outputJar = null;
+        public final String inputJar;
+        public final String outputJar;
 
         public ProguardJarPair(String inputJar, String outputJar) {
             this.inputJar = inputJar;
