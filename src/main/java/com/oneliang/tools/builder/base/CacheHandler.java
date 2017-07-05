@@ -31,6 +31,7 @@ public abstract class CacheHandler extends BaseHandler {
         public final String cacheFullFilename;
         public final List<String> directoryList;
         public String fileSuffix = null;
+        public boolean deep = true;
         public CacheKeyProcessor cacheKeyProcessor = null;
         public ChangedFileProcessor changedFileProcessor = null;
 
@@ -84,6 +85,7 @@ public abstract class CacheHandler extends BaseHandler {
                 final String directory = new File(inputDirectory).getAbsolutePath();
                 FileUtil.MatchOption matchOption = new FileUtil.MatchOption(directory);
                 matchOption.fileSuffix = cacheOption.fileSuffix;
+                matchOption.deep = cacheOption.deep;
                 matchOption.processor = new FileUtil.MatchOption.Processor() {
                     public String onMatch(File file) {
                         String fullFilename = file.getAbsolutePath();
