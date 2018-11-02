@@ -2,7 +2,7 @@ package com.oneliang.tools.builder.base;
 
 import java.util.List;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.BuilderConfiguration.HandlerBean;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.logging.Logger;
@@ -41,7 +41,7 @@ public class BaseHandler extends AbstractHandler {
 								return false;
 							}
 						} catch (Exception e) {
-							logger.error(Constant.Base.EXCEPTION, e);
+							logger.error(Constants.Base.EXCEPTION, e);
 							logger.error("Handler handle failure:" + innerHandler, null);
 							return false;
 						}
@@ -61,7 +61,7 @@ public class BaseHandler extends AbstractHandler {
 					for (String outputKey : outputKeyList) {
 						Object outputValue = this.configuration.getTemporaryData(outputKey);
 						String value = outputValue == null ? StringUtil.BLANK : outputValue.toString();
-						command = command.replace(Constant.Symbol.BIG_BRACKET_LEFT + outputKey + Constant.Symbol.BIG_BRACKET_RIGHT, value);
+						command = command.replace(Constants.Symbol.BIG_BRACKET_LEFT + outputKey + Constants.Symbol.BIG_BRACKET_RIGHT, value);
 					}
 				}
 				String[] commandArray = command.split(StringUtil.SPACE);
@@ -71,7 +71,7 @@ public class BaseHandler extends AbstractHandler {
 						return false;
 					}
 				} catch (Exception e) {
-					logger.error(Constant.Base.EXCEPTION, e);
+					logger.error(Constants.Base.EXCEPTION, e);
 					logger.error("Command execute failure:" + command, null);
 					return false;
 				}

@@ -14,7 +14,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.Handler.Executor;
 import com.oneliang.util.common.ClassUtil;
 import com.oneliang.util.common.JavaXmlUtil;
@@ -74,9 +74,9 @@ public class BuilderConfiguration {
         }
         this.taskNodeTimeFile = this.configurationMap.get(MAP_KEY_TASK_NODE_TIME_FILE);
         this.targetTask = this.configurationMap.get(MAP_KEY_TARGET_TASK);
-        logger.info("Version:" + Version.MAJOR + Constant.Symbol.DOT + Version.MINOR + Constant.Symbol.DOT + Version.PATCH + "\tbuildDate:" + Version.BUILD_DATE);
-        logger.info("Default(" + MAP_KEY_CONCURRENT_MAX_THREADS + Constant.Symbol.COLON + this.maxThreads + ")");
-        logger.info("Default(" + MAP_KEY_TASK_NODE_TIME_FILE + Constant.Symbol.COLON + this.taskNodeTimeFile + ")");
+        logger.info("Version:" + Version.MAJOR + Constants.Symbol.DOT + Version.MINOR + Constants.Symbol.DOT + Version.PATCH + "\tbuildDate:" + Version.BUILD_DATE);
+        logger.info("Default(" + MAP_KEY_CONCURRENT_MAX_THREADS + Constants.Symbol.COLON + this.maxThreads + ")");
+        logger.info("Default(" + MAP_KEY_TASK_NODE_TIME_FILE + Constants.Symbol.COLON + this.taskNodeTimeFile + ")");
         Iterator<Entry<String, String>> iterator = this.configurationMap.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<String, String> entry = iterator.next();
@@ -90,7 +90,7 @@ public class BuilderConfiguration {
                 }
             }
             if (needToLog) {
-                logger.info("Configuration(" + key + Constant.Symbol.COLON + value + ")");
+                logger.info("Configuration(" + key + Constants.Symbol.COLON + value + ")");
             }
         }
         this.configuration.initialize();
@@ -151,7 +151,7 @@ public class BuilderConfiguration {
                 this.configuration = (Configuration) configurationObject;
                 this.configuration.setBuilderConfiguration(this);
             } catch (Exception e) {
-                logger.error(Constant.Base.EXCEPTION, e);
+                logger.error(Constants.Base.EXCEPTION, e);
                 throw new BuilderConfigurationException(e);
             }
         }
@@ -245,7 +245,7 @@ public class BuilderConfiguration {
     protected void parseOverrideCommand(String[] overrideArgs) {
         if (overrideArgs != null) {
             for (String arg : overrideArgs) {
-                String[] keyValue = arg.split(Constant.Symbol.EQUAL);
+                String[] keyValue = arg.split(Constants.Symbol.EQUAL);
                 if (keyValue != null && keyValue.length == 2) {
                     String key = keyValue[0];
                     String value = keyValue[1];
@@ -263,8 +263,8 @@ public class BuilderConfiguration {
         for (Method method : methods) {
             String methodName = method.getName();
             String fieldName = null;
-            if (methodName.startsWith(Constant.Method.PREFIX_SET)) {
-                fieldName = ObjectUtil.methodNameToFieldName(Constant.Method.PREFIX_SET, methodName);
+            if (methodName.startsWith(Constants.Method.PREFIX_SET)) {
+                fieldName = ObjectUtil.methodNameToFieldName(Constants.Method.PREFIX_SET, methodName);
             }
             if (fieldName != null) {
                 String configurationValue = this.configurationMap.get(fieldName);
@@ -276,7 +276,7 @@ public class BuilderConfiguration {
                         try {
                             method.invoke(this.configuration, value);
                         } catch (Exception e) {
-                            logger.error(Constant.Base.EXCEPTION, e);
+                            logger.error(Constants.Base.EXCEPTION, e);
                         }
                     }
                 }
@@ -298,7 +298,7 @@ public class BuilderConfiguration {
                 handlerBean.setInstance(instance);
                 this.configuration.initializingHandlerBean(handlerBean);
             } catch (Exception e) {
-                logger.error(Constant.Base.EXCEPTION, e);
+                logger.error(Constants.Base.EXCEPTION, e);
                 throw new BuilderConfigurationException(e);
             }
             Executor[] executors = handlerBean.getExecutors();

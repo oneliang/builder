@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.tools.builder.base.BuilderConfiguration.TaskNodeInsertBean;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.logging.Logger;
@@ -151,7 +151,7 @@ public class CommonBuilder implements Builder {
                                     exit("Handler handle failure,taskNode:" + taskNode.getName() + ",handler:" + handler);
                                 }
                             } catch (Exception e) {
-                                logger.error(Constant.Base.EXCEPTION, e);
+                                logger.error(Constants.Base.EXCEPTION, e);
                                 exit("Handler handle failure,taskNode:" + taskNode.getName() + ",handler:" + handler);
                             }
                         }

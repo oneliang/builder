@@ -22,7 +22,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.android.dx.merge.DexMerger;
-import com.oneliang.Constant;
+import com.oneliang.Constants;
 import com.oneliang.util.common.JavaXmlUtil;
 import com.oneliang.util.common.StringUtil;
 import com.oneliang.util.file.FileUtil;
@@ -319,7 +319,7 @@ public final class BuilderUtil {
     private static String generateAndroidAaptCommand(String aaptExecutePath, String androidManifest, List<String> resourceDirectoryList, List<String> assetsDirectoryList, String destinationDirectory, List<String> dependJarList, String resourceOutputFullFilename, boolean isGenerateR, boolean isDebug) {
         StringBuilder commandStringBuilder = new StringBuilder();
         if (aaptExecutePath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            aaptExecutePath = Constant.Symbol.DOUBLE_QUOTES + aaptExecutePath + Constant.Symbol.DOUBLE_QUOTES;
+            aaptExecutePath = Constants.Symbol.DOUBLE_QUOTES + aaptExecutePath + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append(aaptExecutePath + StringUtil.SPACE);
         commandStringBuilder.append("package" + StringUtil.SPACE);
@@ -362,7 +362,7 @@ public final class BuilderUtil {
             for (String dependJar : dependJarList) {
                 commandStringBuilder.append("-I" + StringUtil.SPACE);
                 if (dependJar.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-                    dependJar = Constant.Symbol.DOUBLE_QUOTES + dependJar + Constant.Symbol.DOUBLE_QUOTES;
+                    dependJar = Constants.Symbol.DOUBLE_QUOTES + dependJar + Constants.Symbol.DOUBLE_QUOTES;
                 }
                 commandStringBuilder.append(dependJar + StringUtil.SPACE);
             }
@@ -383,11 +383,11 @@ public final class BuilderUtil {
     public static int executeAndroidAidl(String androidAidlExecutorPath, String frameworkAidlFullFilename, String sourceDirectory, String destinationDirectory, String aidlFullFilename) {
         StringBuilder commandStringBuilder = new StringBuilder();
         if (androidAidlExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            androidAidlExecutorPath = Constant.Symbol.DOUBLE_QUOTES + androidAidlExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
+            androidAidlExecutorPath = Constants.Symbol.DOUBLE_QUOTES + androidAidlExecutorPath + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append(androidAidlExecutorPath + StringUtil.SPACE);
         if (frameworkAidlFullFilename.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            frameworkAidlFullFilename = Constant.Symbol.DOUBLE_QUOTES + frameworkAidlFullFilename + Constant.Symbol.DOUBLE_QUOTES;
+            frameworkAidlFullFilename = Constants.Symbol.DOUBLE_QUOTES + frameworkAidlFullFilename + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append("-p" + frameworkAidlFullFilename + StringUtil.SPACE);
         commandStringBuilder.append("-I" + sourceDirectory + StringUtil.SPACE);
@@ -407,7 +407,7 @@ public final class BuilderUtil {
     public static void executeAndroidDx(String androidDxExecutorPath, String androidDxParameters, String outputDexFullFilename, List<String> classesDirectoryListAndLibraryList) {
         StringBuilder commandStringBuilder = new StringBuilder();
         if (androidDxExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            androidDxExecutorPath = Constant.Symbol.DOUBLE_QUOTES + androidDxExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
+            androidDxExecutorPath = Constants.Symbol.DOUBLE_QUOTES + androidDxExecutorPath + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append(androidDxExecutorPath + StringUtil.SPACE);
         commandStringBuilder.append("--dex" + StringUtil.SPACE);
@@ -491,7 +491,7 @@ public final class BuilderUtil {
     private static int executeJava(String javaExecutorPath, String classpath, String className, String jarFullFilename, List<String> argumentList, boolean isExecuteJar, boolean needToLogCommand) {
         List<String> parameterList = new ArrayList<String>();
         if (javaExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            javaExecutorPath = Constant.Symbol.DOUBLE_QUOTES + javaExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
+            javaExecutorPath = Constants.Symbol.DOUBLE_QUOTES + javaExecutorPath + Constants.Symbol.DOUBLE_QUOTES;
         }
         parameterList.add(javaExecutorPath);
         if (isExecuteJar) {
@@ -511,7 +511,7 @@ public final class BuilderUtil {
 
     private static List<String> generateJavacParameterList(List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList, List<String> processorPathList, List<String> bootClasspathList, List<KeyValue<String, String>> otherParameterList) {
         List<String> parameterList = new ArrayList<String>();
-        String seperator = isWindowsOS ? Constant.Symbol.SEMICOLON : Constant.Symbol.COLON;
+        String seperator = isWindowsOS ? Constants.Symbol.SEMICOLON : Constants.Symbol.COLON;
         if (classpathList != null && !classpathList.isEmpty()) {
             parameterList.add("-classpath");
             parameterList.add(listToCommandString(classpathList, null, seperator));
@@ -527,7 +527,7 @@ public final class BuilderUtil {
         parameterList.add("-d");
         parameterList.add(destinationDirectory);
         parameterList.add("-encoding");
-        parameterList.add(Constant.Encoding.UTF8);
+        parameterList.add(Constants.Encoding.UTF8);
         if (processorPathList != null && !processorPathList.isEmpty()) {
             parameterList.add("-processorpath");
             parameterList.add(listToCommandString(processorPathList, null, seperator));
@@ -578,7 +578,7 @@ public final class BuilderUtil {
     public static int executeJavac(String javacExecutorPath, List<String> sourceList, String destinationDirectory, boolean isDebug, List<String> classpathList, List<String> processorPathList, List<String> bootClasspathList, List<KeyValue<String, String>> otherParameterList) {
         List<String> parameterList = new ArrayList<String>();
         if (javacExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            javacExecutorPath = Constant.Symbol.DOUBLE_QUOTES + javacExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
+            javacExecutorPath = Constants.Symbol.DOUBLE_QUOTES + javacExecutorPath + Constants.Symbol.DOUBLE_QUOTES;
         }
         parameterList.add(javacExecutorPath);
         // commandStringBuilder.append("-verbose"+StringUtil.SPACE);
@@ -643,7 +643,7 @@ public final class BuilderUtil {
     public static void executeJar(String jarExecutorPath, String outputJarFullFilename, String classesDirectory, boolean isAppend) {
         StringBuilder commandStringBuilder = new StringBuilder();
         if (jarExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            jarExecutorPath = Constant.Symbol.DOUBLE_QUOTES + jarExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
+            jarExecutorPath = Constants.Symbol.DOUBLE_QUOTES + jarExecutorPath + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append(jarExecutorPath + StringUtil.SPACE);
         if (!isAppend) {
@@ -655,7 +655,7 @@ public final class BuilderUtil {
         commandStringBuilder.append(outputJarFullFilename + StringUtil.SPACE);
         commandStringBuilder.append("-C" + StringUtil.SPACE);
         commandStringBuilder.append(classesDirectory + StringUtil.SPACE);
-        commandStringBuilder.append(Constant.Symbol.DOT);
+        commandStringBuilder.append(Constants.Symbol.DOT);
         executeCommand(new String[] { commandStringBuilder.toString() });
     }
 
@@ -666,7 +666,7 @@ public final class BuilderUtil {
      * @param classesDirectory
      */
     public static void jar(String outputJarFullFilename, String classesDirectory) {
-        FileUtil.zip(outputJarFullFilename, classesDirectory, Constant.File.CLASS);
+        FileUtil.zip(outputJarFullFilename, classesDirectory, Constants.File.CLASS);
     }
 
     /**
@@ -685,12 +685,12 @@ public final class BuilderUtil {
     public static int executeJarSigner(String jarSingerExecutorPath, String keyStore, String storePassword, String keyPassword, String alias, String signedApkOutputFullFilename, String unsingedApkFullFilename, String digestalg, String sigalg) {
         StringBuilder commandStringBuilder = new StringBuilder();
         if (jarSingerExecutorPath.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            jarSingerExecutorPath = Constant.Symbol.DOUBLE_QUOTES + jarSingerExecutorPath + Constant.Symbol.DOUBLE_QUOTES;
+            jarSingerExecutorPath = Constants.Symbol.DOUBLE_QUOTES + jarSingerExecutorPath + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append(jarSingerExecutorPath + StringUtil.SPACE);
         commandStringBuilder.append("-keystore" + StringUtil.SPACE);
         if (keyStore.indexOf(StringUtil.SPACE) > 0 && BuilderUtil.isWindowsOS()) {
-            keyStore = Constant.Symbol.DOUBLE_QUOTES + keyStore + Constant.Symbol.DOUBLE_QUOTES;
+            keyStore = Constants.Symbol.DOUBLE_QUOTES + keyStore + Constants.Symbol.DOUBLE_QUOTES;
         }
         commandStringBuilder.append(keyStore + StringUtil.SPACE);
         commandStringBuilder.append("-storepass" + StringUtil.SPACE);
@@ -823,7 +823,7 @@ public final class BuilderUtil {
                 inputThread.interrupt();
                 process.destroy();
             } catch (Exception e) {
-                logger.error(Constant.Base.EXCEPTION, e);
+                logger.error(Constants.Base.EXCEPTION, e);
                 throw new BuildException(e);
             }
         }
@@ -849,7 +849,7 @@ public final class BuilderUtil {
      * @return List<String>
      */
     public static List<String> findWantToGenerateAidlListWithCache(List<String> sourceDirectoryList, Properties cacheProperties) {
-        return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constant.Symbol.DOT + Constant.File.AIDL, true);
+        return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constants.Symbol.DOT + Constants.File.AIDL, true);
     }
 
     /**
@@ -863,7 +863,7 @@ public final class BuilderUtil {
      * @return List<String>
      */
     public static List<String> findWantToCompileSourceListWithCache(List<String> sourceDirectoryList, Properties cacheProperties, boolean isFile) {
-        return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constant.Symbol.DOT + Constant.File.JAVA, isFile);
+        return FileUtil.findFileListWithCache(sourceDirectoryList, cacheProperties, Constants.Symbol.DOT + Constants.File.JAVA, isFile);
     }
 
     /**
@@ -953,12 +953,12 @@ public final class BuilderUtil {
         List<String> noCompressList = generatingApkNoCompressList();
         for (String outputFile : outputFileList) {
             String zipEntryName = outputFile.substring(buildHomeFullFilenameLength, outputFile.length());
-            zipEntryName = zipEntryName.replace(Constant.Symbol.SLASH_RIGHT, Constant.Symbol.SLASH_LEFT);
+            zipEntryName = zipEntryName.replace(Constants.Symbol.SLASH_RIGHT, Constants.Symbol.SLASH_LEFT);
             ZipEntry zipEntry = new ZipEntry(zipEntryName);
             boolean noCompress = false;
             if (noCompressList != null) {
                 for (String noCompressName : noCompressList) {
-                    if (zipEntryName.equals(noCompressName) || StringUtil.isMatchPattern(zipEntryName, Constant.Symbol.WILDCARD + noCompressName)) {
+                    if (zipEntryName.equals(noCompressName) || StringUtil.isMatchPattern(zipEntryName, Constants.Symbol.WILDCARD + noCompressName)) {
                         noCompress = true;
                     }
                 }
@@ -1017,7 +1017,7 @@ public final class BuilderUtil {
                 }
             } catch (Exception e) {
                 if (isWindowsOS()) {// it has stream exception in linux
-                    logger.error(Constant.Base.EXCEPTION, e);
+                    logger.error(Constants.Base.EXCEPTION, e);
                 }
             } finally {
                 if (this.inputStream != null) {
@@ -1025,7 +1025,7 @@ public final class BuilderUtil {
                         this.inputStream.close();
                     } catch (Exception e) {
                         if (isWindowsOS()) {
-                            logger.error(Constant.Base.EXCEPTION, e);
+                            logger.error(Constants.Base.EXCEPTION, e);
                         }
                     }
                 }
